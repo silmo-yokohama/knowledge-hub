@@ -43,7 +43,7 @@ knowledge-hub/
 1. リポジトリをクローン
 
 ```bash
-git clone git@github.com:your-username/knowledge-hub.git
+git clone https://github.com/silmo-yokohama/knowledge-hub.git
 cd knowledge-hub
 ```
 
