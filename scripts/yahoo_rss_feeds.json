@@ -1,0 +1,69 @@
+{
+  "_comment": "Yahoo ニュース RSS フィード定義。キーがフィード識別子、url/labelを指定する。",
+  "categories": {
+    "_comment": "Yahoo ニュースのカテゴリ別フィード",
+    "sports": {
+      "url": "https://news.yahoo.co.jp/rss/categories/sports.xml",
+      "label": "スポーツ"
+    },
+    "it": {
+      "url": "https://news.yahoo.co.jp/rss/categories/it.xml",
+      "label": "IT・科学"
+    },
+    "local": {
+      "url": "https://news.yahoo.co.jp/rss/categories/local.xml",
+      "label": "地域"
+    }
+  },
+  "media": {
+    "_comment": "Yahoo ニュースに配信しているメディア別フィード",
+    "yonnana": {
+      "url": "https://news.yahoo.co.jp/rss/media/yonnana/all.xml",
+      "label": "47NEWS"
+    },
+    "abema": {
+      "url": "https://news.yahoo.co.jp/rss/media/abema/all.xml",
+      "label": "ABEMA TIMES"
+    },
+    "digiday": {
+      "url": "https://news.yahoo.co.jp/rss/media/digiday/all.xml",
+      "label": "DIGIDAY"
+    },
+    "gamespav": {
+      "url": "https://news.yahoo.co.jp/rss/media/gamespav/all.xml",
+      "label": "Game*Spark"
+    },
+    "impgmw": {
+      "url": "https://news.yahoo.co.jp/rss/media/impgmw/all.xml",
+      "label": "Game Watch"
+    },
+    "fullcount": {
+      "url": "https://news.yahoo.co.jp/rss/media/fullcount/all.xml",
+      "label": "Full-Count"
+    },
+    "imppcw": {
+      "url": "https://news.yahoo.co.jp/rss/media/imppcw/all.xml",
+      "label": "PC Watch"
+    },
+    "impwfw": {
+      "url": "https://news.yahoo.co.jp/rss/media/impwfw/all.xml",
+      "label": "家電 Watch"
+    },
+    "baseballc": {
+      "url": "https://news.yahoo.co.jp/rss/media/baseballc/all.xml",
+      "label": "ベースボールチャンネル"
+    },
+    "bballk": {
+      "url": "https://news.yahoo.co.jp/rss/media/bballk/all.xml",
+      "label": "バスケットボールキング"
+    },
+    "sasahi": {
+      "url": "https://news.yahoo.co.jp/rss/media/sasahi/all.xml",
+      "label": "AERA dot."
+    },
+    "kana": {
+      "url": "https://news.yahoo.co.jp/rss/media/kana/all.xml",
+      "label": "神奈川新聞"
+    }
+  }
+}

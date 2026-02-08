@@ -19,7 +19,7 @@ Claude Codeスキルとして動作し、ターミナル上で完結する。
 ## ファイル命名規則
 
 - **Headlines レポート**: `01.Trends/Headlines/YYYY-MM/YYYY-MM-DD.md`
-- **DeepDives レポート**: `01.Trends/DeepDives/YYYY-MM/YYYY-MM-DD_{kebab-case-title}.md`
+- **DeepDives レポート**: `01.Trends/DeepDives/YYYY-MM/YYYY-MM-DD_記事のタイトル.md`
 - **アイデア**: `02.Ideas/YYYY-MM-DD_{title}/`
 - **学習ログ**: `03.Learnings/YYYY-MM-DD_{title}/REPORT.md`
 - **ブログ下書き**: `04.BlogDrafts/YYYY-MM-DD_{title}/draft.md`
@@ -34,12 +34,13 @@ Claude Codeスキルとして動作し、ターミナル上で完結する。
 
 - はてなブックマークRSS: カテゴリ間で1秒以上のスリープを入れること
 - はてなブックマークブコメAPI: User-Agentヘッダを必ず付与すること（ないと空レスポンスになる）
+- Yahoo ニュースRSS: フィード間で1秒以上のスリープを入れること
 - 全てのHTTPリクエスト: User-Agentヘッダ `knowledge-hub/0.1` を付与すること
 - レート制限を考慮し、連続リクエストには適切な間隔を設けること
 
 ## スキル関連
 
-- スキル配置先: `~/.claude/skills/`
+- スキル配置先: `.claude/skills/`（プロジェクトローカル）
 - プロフィール情報: `/home/a/00.knowledge-hub/PROFILE.md`
 - スクリプト配置先: `/home/a/00.knowledge-hub/scripts/`
 
