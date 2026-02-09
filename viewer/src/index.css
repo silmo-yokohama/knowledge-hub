@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+
+/* ====================================
+   The Morning Brief - テーマ定義
+   ==================================== */
+@theme {
+  /* タイポグラフィ */
+  --font-display: 'Newsreader', 'Georgia', serif;
+  --font-body: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ランク別カラー */
+  --color-rank-s: #C41E3A;
+  --color-rank-a: #B8860B;
+  --color-rank-b: #2563EB;
+  --color-rank-c: #6B7280;
+
+  /* ソース別カラー */
+  --color-source-hatena: #00A4DE;
+  --color-source-yahoo: #FF0033;
+  --color-source-reddit: #FF4500;
+
+  /* ライトテーマ */
+  --color-surface: #FAF9F6;
+  --color-surface-raised: #FFFFFF;
+  --color-surface-hover: #F3F2EE;
+  --color-surface-sidebar: #F0EFE9;
+  --color-ink: #1A1A2E;
+  --color-ink-secondary: #4A4A5A;
+  --color-ink-tertiary: #8A8A9A;
+  --color-border: #E5E4DE;
+  --color-border-subtle: #EEEDE8;
+  --color-accent: #C41E3A;
+  --color-accent-soft: #FDF2F4;
+  --color-checked-bg: #F0FDF4;
+  --color-checked-border: #86EFAC;
+}
+
+/* ====================================
+   ダークテーマ
+   ==================================== */
+.dark {
+  --color-surface: #0F0F14;
+  --color-surface-raised: #1A1A22;
+  --color-surface-hover: #24242E;
+  --color-surface-sidebar: #141418;
+  --color-ink: #E8E6DF;
+  --color-ink-secondary: #A8A6A0;
+  --color-ink-tertiary: #6B6965;
+  --color-border: #2A2A34;
+  --color-border-subtle: #1F1F28;
+  --color-accent: #E85D75;
+  --color-accent-soft: #2A1520;
+  --color-checked-bg: #0A2015;
+  --color-checked-border: #22633A;
+}
+
+/* ====================================
+   ベーススタイル
+   ==================================== */
+html {
+  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* スクロールバー */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-tertiary);
+}
+
+/* highlight.js コードブロック */
+pre code.hljs {
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+/* セレクション */
+::selection {
+  background-color: var(--color-accent);
+  color: white;
+}

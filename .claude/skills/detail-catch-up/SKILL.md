@@ -17,33 +17,31 @@ description: /daily-trendsレポートでチェックした記事を詳細に分
 ### Step 1: Headlinesレポートの読み込み
 
 1. PROFILE.md を読み込む: `/home/a/00.knowledge-hub/PROFILE.md`
-2. 最新のHeadlinesレポートを探す
+2. 最新のHeadlinesレポート（JSON形式）を探す
 
 **レポートの探し方**:
 - まず `01.Trends/Headlines/` 配下のディレクトリをGlobツールで確認する
-- パターン: `/home/a/00.knowledge-hub/01.Trends/Headlines/**/*.md`
+- パターン: `/home/a/00.knowledge-hub/01.Trends/Headlines/**/*.json`
 - 最新の日付のファイルを選択する
 - ユーザーが特定の日付を指定した場合はそのファイルを使用する
 
-3. レポートファイルをReadツールで読み込む
+3. レポートファイル（JSON）をReadツールで読み込み、パースする
 
 ### Step 2: チェック済み記事の検出
 
-読み込んだレポートから `- [x]` でチェックされた記事を抽出する。
+読み込んだJSONデータの `articles` 配列から `checked: true` の記事を抽出する。
 
-**抽出するパターン**:
+**抽出方法**:
 ```
-- [x] **[記事タイトル](URL)**
-  - {カテゴリー} | {取得元} | ...
-  - {概要}
+articles.filter(article => article.checked === true)
 ```
 
 各チェック済み記事から以下を取得:
-- 記事タイトル
-- 記事URL
-- カテゴリー
-- 取得元（はてブ / Yahoo ニュース / Reddit）
-- ランク（S/A/B/C）
+- `title`: 記事タイトル
+- `url`: 記事URL
+- `category`: カテゴリー
+- `source`: 取得元（`"hatena"` / `"yahoo"` / `"reddit"`）
+- `rank`: ランク（`"S"` / `"A"` / `"B"` / `"C"`）
 
 ### Step 3: 分析対象の確認
 
@@ -63,7 +61,7 @@ description: /daily-trendsレポートでチェックした記事を詳細に分
 チェック済み記事が0件の場合:
 ```
 チェックされた記事が見つかりませんでした。
-Headlinesレポートの記事にチェック `- [x]` を入れてから再度実行してください。
+ビューア（cd viewer && npm run dev）で記事をチェックしてから再度実行してください。
 ```
 
 ### Step 4: 各記事の詳細分析

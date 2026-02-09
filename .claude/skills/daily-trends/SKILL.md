@@ -27,7 +27,7 @@ Read ツールで `/home/a/00.knowledge-hub/PROFILE.md` を読み込み、ユー
 
 1. 今日の日付を確認する（YYYY-MM-DD形式）
 2. 出力先ディレクトリ `01.Trends/Headlines/YYYY-MM/` が存在しない場合は作成する
-3. 同日のレポート `YYYY-MM-DD.md` が既に存在する場合は、**ユーザーに上書きの確認を取る**
+3. 同日のレポート `YYYY-MM-DD.json` が既に存在する場合は、**ユーザーに上書きの確認を取る**
 4. `01.Trends/DeepDives/` 配下の全ファイルをGlobツールで取得し、各ファイルの先頭から「元記事」URLを抽出して、**過去に詳細分析済みの記事URLリスト**を作成する
    - パターン: `/home/a/00.knowledge-hub/01.Trends/DeepDives/**/*.md`
    - 各ファイルの `> 元記事:` 行からURLを取得する
@@ -107,35 +107,49 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
 
 ### Step 8: レポート生成
 
-`references/report-template.md` のテンプレートに従い、レポートを生成する。
+`references/report-schema.md` のJSONスキーマに従い、レポートデータを生成する。
 
-**レポートの構成**:
-1. **ヘッダ**: 生成日時、データソース、記事総数
-2. **Sランク**: 最重要記事（深掘り推奨）
-3. **Aランク**: 重要記事（学習分野）
-4. **Bランク**: 関連記事（周辺分野・趣味）
-5. **Cランク**: 一般ニュース
-6. **本日のピックアップ TOP3**: AIの独自視点で特に読む価値がある記事3つを選出し、選出理由を記載
+**レポートの構成（JSON）**:
+- `date`: レポート日付（`YYYY-MM-DD`）
+- `generatedAt`: 生成日時（ISO 8601）
+- `dataSources`: データソース一覧
+- `summary`: 記事総数・ランク別件数 `{ total, S, A, B, C }`
+- `articles`: 記事配列（各記事は以下のフィールドを持つ）
+  - `id`: URLのSHA-256ハッシュ先頭8文字
+  - `title`: 記事タイトル
+  - `titleJa`: Reddit英語記事の日本語訳（日本語記事は `null`）
+  - `url`: 記事URL
+  - `category`: カテゴリー（例: AI/LLM, フロントエンド, 野球 等）
+  - `source`: 取得元（`"hatena"` / `"yahoo"` / `"reddit"`）
+  - `score`: 数値スコア（はてブ数 / Redditポイント / Yahooは `0`）
+  - `scoreLabel`: 表示用スコア（`"210 users"` / `"ITmedia NEWS"` / `"735pt 100comments"`）
+  - `subreddit`: Redditの場合のみ（例: `"r/ClaudeAI"`）、それ以外は `null`
+  - `rank`: ランク（`"S"` / `"A"` / `"B"` / `"C"`）
+  - `summary`: 概要（30〜50文字程度の1行要約）
+  - `checked`: `false`（初期値、ビューアでチェック）
+- `trendAnalysis`: その日のトレンド分析（3〜5件）。カテゴリに関係なく、複数の記事に共通するテーマや話題を横断的に分析する
+  - `topic`: トレンドのテーマ（短いタイトル、20文字程度。例: 「AI安全性の議論が加速」「新フレームワークのリリースラッシュ」）
+  - `description`: なぜその話題が注目されているかの説明（100〜150文字程度。どんな記事が共通のテーマに触れているか、なぜ同時に話題になっているかを分析）
+  - `relatedArticleIds`: 関連する記事の `id` 一覧
 
-**記事の表示形式**:
+**IDの生成方法**:
+記事URLをSHA-256ハッシュにかけ、先頭8文字を使用する。Pythonの場合:
+
+```python
+import hashlib
+article_id = hashlib.sha256(url.encode()).hexdigest()[:8]
 ```
-- [ ] **[記事タイトル](URL)**
-  - {カテゴリー} | {取得元} | {はてブ数 or コメント数} | ⭐ {ランク}
-  - {概要}
-```
-
-- `カテゴリー`: 記事のジャンル（例: AI/LLM, フロントエンド, 野球 等）
-- `取得元`: はてブ / Yahoo ニュース / Reddit
-- `はてブ数 or コメント数`: はてブの場合は `{N} users`、Yahoo ニュースの場合はソースメディア名、Redditの場合は `{N}pt {M}comments` を表示
-- `ランク`: S / A / B / C
 
 ### Step 9: ファイル保存
 
-Write ツールでレポートを以下のパスに保存する:
+Write ツールでレポートをJSON形式で以下のパスに保存する:
 
 ```
-/home/a/00.knowledge-hub/01.Trends/Headlines/YYYY-MM/YYYY-MM-DD.md
+/home/a/00.knowledge-hub/01.Trends/Headlines/YYYY-MM/YYYY-MM-DD.json
 ```
+
+- `JSON.stringify` 相当の整形済みJSON（インデント2スペース）で出力する
+- `ensure_ascii=False` 相当で日本語はそのまま出力する
 
 ### Step 10: 完了報告
 
@@ -143,7 +157,7 @@ Write ツールでレポートを以下のパスに保存する:
 - 生成したレポートのパス
 - 収集した記事の総数とランク別の内訳
 - エラーがあった場合はその内容
-- 「チェックボックスにチェックを入れて `/detail-catch-up` を実行すると、詳細分析レポートを生成できます」と案内する
+- 「ビューア（`cd viewer && npm run dev`）で記事をチェックし、`/detail-catch-up` を実行すると詳細分析レポートを生成できます」と案内する
 
 ## 注意事項
 
