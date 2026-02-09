@@ -9,6 +9,7 @@ interface Props {
 /**
  * アプリ全体のレイアウト
  * ヘッダー（ナビゲーション + テーマ切り替え）+ メインコンテンツ
+ * ワイドスクリーン対応: max-width制限なし、全幅活用
  */
 export function Layout({ children }: Props) {
   return (
@@ -18,7 +19,7 @@ export function Layout({ children }: Props) {
         className="sticky top-0 z-50 border-b border-[var(--color-border)]
                     bg-[var(--color-surface)]/95 backdrop-blur-sm"
       >
-        <div className="max-w-[1400px] mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="px-8 h-14 flex items-center justify-between">
           {/* ロゴ & タイトル */}
           <NavLink to="/" className="flex items-center gap-3 no-underline">
             <span
@@ -47,8 +48,8 @@ export function Layout({ children }: Props) {
         </div>
       </header>
 
-      {/* メインコンテンツ */}
-      <main className="flex-1 max-w-[1400px] w-full mx-auto">
+      {/* メインコンテンツ: 全幅使用 */}
+      <main className="flex-1">
         {children}
       </main>
     </div>

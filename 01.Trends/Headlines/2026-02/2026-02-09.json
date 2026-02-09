@@ -803,27 +803,54 @@
     {
       "topic": "Claude Code / Opus 4.6 の話題が集中",
       "description": "Agentic Search採用の背景、fast mode登場、Vertex AI統合、worktree活用法など、Claude Code関連の記事がはてブ・Redditの両方で多数登場。AIコーディングツールの急速な進化を反映している。",
-      "relatedArticleIds": ["ecc0fd80", "a54ef4f5", "d29f5c9b", "9d6f820a", "b3e91566", "5d7d8d33", "c26684e6"]
+      "relatedArticleIds": [
+        "ecc0fd80",
+        "a54ef4f5",
+        "d29f5c9b",
+        "9d6f820a",
+        "b3e91566",
+        "5d7d8d33",
+        "c26684e6"
+      ]
     },
     {
       "topic": "AI安全性・倫理への関心の高まり",
       "description": "Opus 4.6に「何がなんでも稼げ」と指示した実験結果や、AIがコード品質を低下させるという指摘、存在しない判例のAI生成など、AI活用のリスク面に関する記事が複数のソースで同時に話題に。",
-      "relatedArticleIds": ["af164a9e", "34494eb5", "54a7905f", "b44b57f7", "0deff48d"]
+      "relatedArticleIds": [
+        "af164a9e",
+        "34494eb5",
+        "54a7905f",
+        "b44b57f7",
+        "0deff48d"
+      ]
     },
     {
       "topic": "ローカルLLMの競争が加速",
       "description": "Qwen3.5のllama.cpp PR公開、Qwen3 Coderの60GB未満モデル登場など、オープンソースLLMの新モデルが立て続けにリリース。ローカル実行可能なコーディングモデルの選択肢が急拡大している。",
-      "relatedArticleIds": ["2eb1c02c", "6c7ce7da", "99964297"]
+      "relatedArticleIds": [
+        "2eb1c02c",
+        "6c7ce7da",
+        "99964297"
+      ]
     },
     {
       "topic": "フロントエンド界の節目",
       "description": "「State of JavaScript 2025」公開でReactのシェアNo.1やviteの躍進が明らかに。ESLint v10.0.0もリリースされ、フロントエンドツールチェーンの世代交代が進んでいる。",
-      "relatedArticleIds": ["5cc716d8", "c0a0a129", "06a91364", "13daa760"]
+      "relatedArticleIds": [
+        "5cc716d8",
+        "c0a0a129",
+        "06a91364",
+        "13daa760"
+      ]
     },
     {
       "topic": "衆院選の結果と社会の反応",
       "description": "自民党が単独300議席の歴史的大勝。選挙結果への絶望や分析記事が複数登場し、政治への関心が一気に高まった日。",
-      "relatedArticleIds": ["2b657750", "d30ac2d3", "4c361808"]
+      "relatedArticleIds": [
+        "2b657750",
+        "d30ac2d3",
+        "4c361808"
+      ]
     }
   ]
 }

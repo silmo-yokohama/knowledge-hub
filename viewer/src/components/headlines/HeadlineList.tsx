@@ -55,11 +55,11 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
   return (
     <div>
       {/* サマリーバー */}
-      <div className="flex items-baseline gap-4 mb-5">
-        <h1 className="font-display text-2xl font-bold text-[var(--color-ink)]">
+      <div className="flex items-baseline gap-5 mb-8">
+        <h1 className="font-display text-3xl font-bold text-[var(--color-ink)]">
           {formatDateHeading(report.date)}
         </h1>
-        <div className="flex items-center gap-3 text-xs font-mono text-[var(--color-ink-tertiary)]">
+        <div className="flex items-center gap-4 text-sm font-mono text-[var(--color-ink-tertiary)]">
           <span>{report.summary.total}件</span>
           <span className="text-[var(--color-rank-s)]">S:{report.summary.S}</span>
           <span className="text-[var(--color-rank-a)]">A:{report.summary.A}</span>
@@ -93,19 +93,19 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
 
       {/* フィルタ結果の件数 */}
       {filteredArticles.length !== report.articles.length && (
-        <p className="text-xs text-[var(--color-ink-tertiary)] mb-3 font-mono">
+        <p className="text-xs text-[var(--color-ink-tertiary)] mb-4 font-mono">
           {filteredArticles.length} / {report.articles.length} 件を表示
         </p>
       )}
 
-      {/* 記事カードリスト */}
-      <div className="space-y-2">
+      {/* 記事カードリスト: ワイド画面で2カラムグリッド */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
         {filteredArticles.map((article, index) => (
           <HeadlineCard
             key={article.id}
             article={article}
             onToggleCheck={() => onToggleCheck(article.id)}
-            delay={index * 30}
+            delay={index * 20}
           />
         ))}
       </div>

@@ -17,34 +17,34 @@ export function PickupSection({ trends, articles, onToggleCheck }: Props) {
     articles.find((a) => a.id === articleId)
 
   return (
-    <section className="mb-8">
-      <h2 className="font-display text-lg font-semibold text-[var(--color-ink)] mb-3 flex items-center gap-2">
+    <section className="mb-10">
+      <h2 className="font-display text-xl font-semibold text-[var(--color-ink)] mb-4 flex items-center gap-2">
         <span className="text-[var(--color-accent)]">◆</span>
         Today&apos;s Trends
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4">
         {trends.map((trend, index) => (
           <article
             key={index}
             className="rounded-lg border border-[var(--color-border-subtle)]
-                       bg-[var(--color-surface-raised)] p-4
+                       bg-[var(--color-surface-raised)] p-5
                        transition-all duration-300 hover:shadow-md hover:border-[var(--color-border)]"
           >
             {/* テーマ */}
-            <h3 className="font-display text-sm font-semibold text-[var(--color-ink)] leading-snug">
+            <h3 className="font-display text-base font-semibold text-[var(--color-ink)] leading-snug">
               {trend.topic}
             </h3>
             {/* 説明 */}
-            <p className="text-[11px] text-[var(--color-ink-secondary)] mt-2 leading-relaxed">
+            <p className="text-xs text-[var(--color-ink-secondary)] mt-2.5 leading-relaxed">
               {trend.description}
             </p>
             {/* 関連記事 */}
             {trend.relatedArticleIds.length > 0 && (
-              <div className="mt-3 pt-2 border-t border-[var(--color-border-subtle)]">
+              <div className="mt-3.5 pt-2.5 border-t border-[var(--color-border-subtle)]">
                 <span className="text-[10px] font-mono text-[var(--color-ink-tertiary)] uppercase tracking-wider">
                   関連記事
                 </span>
-                <ul className="mt-1 space-y-0.5">
+                <ul className="mt-1.5 space-y-1">
                   {trend.relatedArticleIds.map((id) => {
                     const article = findArticle(id)
                     if (!article) return null

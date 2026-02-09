@@ -663,27 +663,52 @@
     {
       "topic": "Claude Code Agent Teams が一気に話題に",
       "description": "Agent Teamsのリリース直後、はてブとRedditの両方で試用記事が集中。オーケストレーション、ロールプレイ駆動開発、サブエージェントとの比較など、多角的な視点で議論されている。",
-      "relatedArticleIds": ["d73ee929", "a63ef7be", "82f59bd2", "77659021"]
+      "relatedArticleIds": [
+        "d73ee929",
+        "a63ef7be",
+        "82f59bd2",
+        "77659021"
+      ]
     },
     {
       "topic": "AIコーディングの未来像をめぐる議論",
       "description": "Vibecoding論、LLMを自然言語コンパイラとみなす歴史的考察、AI駆動開発ワークフローの具体手法など、AIとソフトウェア開発の関係性を問う記事が複数。コード生成の先にある開発プロセス全体の変革が議論されている。",
-      "relatedArticleIds": ["b872ac6a", "c20e2650", "07fde4bd", "09dea86c", "bd4edca1"]
+      "relatedArticleIds": [
+        "b872ac6a",
+        "c20e2650",
+        "07fde4bd",
+        "09dea86c",
+        "bd4edca1"
+      ]
     },
     {
       "topic": "フロントエンド技術スタックの多様化",
       "description": "Next.jsの内部を自分で実装する記事、TauriでのGUI開発、Vue大規模プロジェクト、Zodスキーマ設計、テスト戦略など、フロントエンド開発の選択肢が広がっていることを示す記事群。",
-      "relatedArticleIds": ["e5893bfa", "bf43895e", "06a91364", "45eed72b", "640e844b"]
+      "relatedArticleIds": [
+        "e5893bfa",
+        "bf43895e",
+        "06a91364",
+        "45eed72b",
+        "640e844b"
+      ]
     },
     {
       "topic": "衆院選を前に政治・経済が盛り上がる",
       "description": "選挙前日ということもあり、チームみらいの分析や自民大勝予測、積極財政の行方、企業献金リストなど政治・経済記事が多数。技術ニュースと並行して社会への関心も高い日。",
-      "relatedArticleIds": ["dd2a27c9", "7d230d66", "6af9fcb9", "24ac9b7e"]
+      "relatedArticleIds": [
+        "dd2a27c9",
+        "7d230d66",
+        "6af9fcb9",
+        "24ac9b7e"
+      ]
     },
     {
       "topic": "開発ツールの世代交代",
       "description": "Postman無料プラン終了でOSS代替が注目を集め、tmux使いがZellijへ移行する流れが話題に。定番ツールからの乗り換えが同日に複数報告されている。",
-      "relatedArticleIds": ["d1899239", "8aef978e"]
+      "relatedArticleIds": [
+        "d1899239",
+        "8aef978e"
+      ]
     }
   ]
 }

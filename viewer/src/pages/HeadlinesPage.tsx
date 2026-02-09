@@ -28,7 +28,7 @@ export function HeadlinesPage() {
       <Sidebar dates={dates} loading={datesLoading} />
 
       {/* メインコンテンツ */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto px-10 py-8">
         {reportLoading && (
           <div className="space-y-3">
             <div className="h-8 w-64 bg-[var(--color-surface-hover)] rounded animate-pulse" />

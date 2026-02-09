@@ -46,43 +46,43 @@ export function DeepDiveViewer({ content, loading, error }: Props) {
   }
 
   return (
-    <div className="p-8 max-w-none">
+    <div className="px-12 py-10 max-w-none">
       <Markdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
           /* 見出し */
           h1: ({ children }) => (
-            <h1 className="font-display text-2xl font-bold text-[var(--color-ink)] mt-0 mb-4 pb-3
+            <h1 className="font-display text-3xl font-bold text-[var(--color-ink)] mt-0 mb-5 pb-4
                            border-b border-[var(--color-border)]">
               {children}
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="font-display text-xl font-semibold text-[var(--color-ink)] mt-8 mb-3">
+            <h2 className="font-display text-2xl font-semibold text-[var(--color-ink)] mt-10 mb-4">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="font-display text-lg font-semibold text-[var(--color-ink)] mt-6 mb-2">
+            <h3 className="font-display text-xl font-semibold text-[var(--color-ink)] mt-8 mb-3">
               {children}
             </h3>
           ),
           /* 段落 */
           p: ({ children }) => (
-            <p className="text-sm text-[var(--color-ink-secondary)] leading-[1.8] mb-4">
+            <p className="text-base text-[var(--color-ink-secondary)] leading-[1.9] mb-5">
               {children}
             </p>
           ),
           /* リスト */
           ul: ({ children }) => (
-            <ul className="text-sm text-[var(--color-ink-secondary)] leading-[1.8] mb-4 pl-4
+            <ul className="text-base text-[var(--color-ink-secondary)] leading-[1.9] mb-5 pl-5
                            list-disc marker:text-[var(--color-accent)]">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="text-sm text-[var(--color-ink-secondary)] leading-[1.8] mb-4 pl-4
+            <ol className="text-base text-[var(--color-ink-secondary)] leading-[1.9] mb-5 pl-5
                            list-decimal marker:text-[var(--color-accent)]">
               {children}
             </ol>

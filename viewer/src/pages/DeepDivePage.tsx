@@ -22,11 +22,11 @@ export function DeepDivePage() {
     <div className="flex h-[calc(100vh-3.5rem)]">
       {/* 左: 記事一覧 */}
       <aside
-        className="w-72 shrink-0 border-r border-[var(--color-border)]
-                    bg-[var(--color-surface-sidebar)] overflow-y-auto p-4"
+        className="w-80 shrink-0 border-r border-[var(--color-border)]
+                    bg-[var(--color-surface-sidebar)] overflow-y-auto p-5"
       >
         <h2 className="text-[11px] font-mono font-medium tracking-widest uppercase
-                        text-[var(--color-ink-tertiary)] mb-3">
+                        text-[var(--color-ink-tertiary)] mb-4">
           Deep Dives
         </h2>
         <DeepDiveList
