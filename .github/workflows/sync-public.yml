@@ -1,0 +1,71 @@
+# プライベートリポジトリの公開可能なコンテンツを
+# 公開リポジトリに自動同期するワークフロー
+#
+# 必要なシークレット:
+#   PUBLIC_REPO_PAT - 公開リポジトリへの書き込み権限を持つ Personal Access Token
+#
+# 除外されるもの（プライベート）:
+#   - 01.Trends/    スキル成果物（トレンドレポート）
+#   - 02.Ideas/     スキル成果物（アイデア企画書）
+#   - 03.Learnings/ スキル成果物（学習ログ）
+#   - 04.BlogDrafts/ スキル成果物（ブログ下書き）
+#   - PROFILE.md    個人プロフィール（テンプレートは PROFILE.example.md として同梱）
+
+name: Sync to Public Repository
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # プライベートリポジトリでのみ実行（公開リポジトリ側では実行しない）
+    if: github.repository == 'silmo-yokohama/knowledge-hub'
+
+    steps:
+      # 公開リポジトリをチェックアウト（差分ベースで同期するため）
+      - name: Checkout public repository
+        uses: actions/checkout@v4
+        with:
+          repository: silmo-yokohama/knowledge-hub-public
+          token: ${{ secrets.PUBLIC_REPO_PAT }}
+          path: public
+
+      # プライベートリポジトリをチェックアウト
+      - name: Checkout private repository
+        uses: actions/checkout@v4
+        with:
+          path: private
+
+      # プライベートなコンテンツを除外して同期
+      - name: Sync public content
+        run: |
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='01.Trends' \
+            --exclude='02.Ideas' \
+            --exclude='03.Learnings' \
+            --exclude='04.BlogDrafts' \
+            --exclude='PROFILE.md' \
+            --exclude='.github/workflows/sync-public.yml' \
+            private/ public/
+
+      # 変更があればコミット & プッシュ
+      - name: Commit and push
+        working-directory: public
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+
+          # 変更がある場合のみコミット
+          if git diff --staged --quiet; then
+            echo "変更なし。スキップします。"
+          else
+            # プライベートリポジトリの最新コミットメッセージを引用
+            COMMIT_MSG=$(cd ../private && git log -1 --pretty=%B)
+            git commit -m "sync: ${COMMIT_MSG}"
+            git push
+          fi
