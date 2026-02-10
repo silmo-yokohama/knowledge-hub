@@ -240,23 +240,32 @@ knowledge-hub/
 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/silmo-yokohama/knowledge-hub.git
+git clone https://github.com/silmo-yokohama/knowledge-hub-public.git knowledge-hub
 cd knowledge-hub
 ```
 
-2. ビューアの依存関係をインストール
+1. PROFILE.md を作成
+
+```bash
+cp PROFILE.example.md PROFILE.md
+```
+
+`PROFILE.md` を開いて、自分の興味領域に合わせて編集してください。
+このファイルがトレンド記事の評価基準になります。
+
+1. ビューアの依存関係をインストール
 
 ```bash
 cd viewer && npm install
 ```
 
-3. Claude Code を起動してスキルを実行
+1. Claude Code を起動してスキルを実行
 
 ```bash
-claude   # Claude Code を起動
+claude
 ```
 
-```
+```bash
 /daily-trends      # 日次トレンドレポートを生成
 /detail-catch-up   # チェックした記事を詳細分析
 /new-idea           # アイデア壁打ちを開始
@@ -265,10 +274,9 @@ claude   # Claude Code を起動
 
 ### PROFILE.md のカスタマイズ
 
-`PROFILE.md` を編集して、自分の興味領域に合わせた記事評価を行えます。
-以下のセクションが評価ランクに影響します:
+`PROFILE.md` の内容がトレンド記事の評価ランクに影響します:
 
-- **さらに深掘りしたい分野** → S ランク
+- **さらに深掘りしたい分野** → S ランク（最高評価）
 - **まだ詳しくない分野** → A ランク
 - **仕事分野・趣味分野** → B ランク
 - **その他（ニュース等）** → C ランク
@@ -310,6 +318,15 @@ claude   # Claude Code を起動
 
 ---
 
+## リポジトリ構成
+
+このプロジェクトは2つのリポジトリで運用されています:
+
+- **[knowledge-hub](https://github.com/silmo-yokohama/knowledge-hub)**（Private）: スキル成果物を含む本体
+- **[knowledge-hub-public](https://github.com/silmo-yokohama/knowledge-hub-public)**（Public）: ツール部分のみの公開ミラー
+
+プライベートリポジトリへの push 時、GitHub Actions がスキル成果物（`01.Trends/`、`02.Ideas/` 等）と個人プロフィール（`PROFILE.md`）を除外した上で公開リポジトリに自動同期します。
+
 ## ライセンス
 
-プライベートリポジトリ。個人利用のみ。
+MIT License
