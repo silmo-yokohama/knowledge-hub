@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import type { HeadlineReport, Rank, Source } from '../../types/headline.ts'
+import type { HeadlineReport, Source } from '../../types/headline.ts'
 import { HeadlineCard } from './HeadlineCard.tsx'
 import { FilterBar, type Filters } from './FilterBar.tsx'
 import { PickupSection } from './PickupSection.tsx'
@@ -12,16 +12,15 @@ interface Props {
 
 /**
  * 記事一覧コンポーネント
- * サマリー、フィルター、ピックアップ、カードリストを統合
+ * サマリー、フィルター、ピックアップ、カテゴリ別カードリストを統合
  */
 export function HeadlineList({ report, onToggleCheck }: Props) {
   const [filters, setFilters] = useState<Filters>({
-    ranks: new Set<Rank>(),
     sources: new Set<Source>(),
     searchText: '',
     showCheckedOnly: false,
   })
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set())
 
   /** 利用可能なカテゴリ一覧（重複排除・ソート） */
   const categories = useMemo(() => {
@@ -32,12 +31,10 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
   /** フィルタ適用済みの記事 */
   const filteredArticles = useMemo(() => {
     return report.articles.filter((article) => {
-      // ランクフィルタ（空 = 全選択）
-      if (filters.ranks.size > 0 && !filters.ranks.has(article.rank)) return false
       // ソースフィルタ（空 = 全選択）
       if (filters.sources.size > 0 && !filters.sources.has(article.source)) return false
-      // カテゴリフィルタ
-      if (selectedCategory && article.category !== selectedCategory) return false
+      // カテゴリフィルタ（空 = 全選択）
+      if (selectedCategories.size > 0 && !selectedCategories.has(article.category)) return false
       // チェック済みフィルタ
       if (filters.showCheckedOnly && !article.checked) return false
       // テキスト検索
@@ -48,9 +45,45 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
       }
       return true
     })
-  }, [report.articles, filters, selectedCategory])
+  }, [report.articles, filters, selectedCategories])
+
+  /** カテゴリ別にグループ化（カテゴリの表示順はレポートの byCategory の順序） */
+  const groupedByCategory = useMemo(() => {
+    const groups: { category: string; articles: typeof filteredArticles }[] = []
+    const categoryOrder = Object.keys(report.summary.byCategory ?? {})
+
+    // レポートのカテゴリ順に並べる
+    for (const cat of categoryOrder) {
+      const catArticles = filteredArticles.filter((a) => a.category === cat)
+      if (catArticles.length > 0) {
+        groups.push({ category: cat, articles: catArticles })
+      }
+    }
+
+    // byCategory にないカテゴリがあれば末尾に追加
+    const knownCats = new Set(categoryOrder)
+    const remaining = filteredArticles.filter((a) => !knownCats.has(a.category))
+    if (remaining.length > 0) {
+      const extraCats = new Set(remaining.map((a) => a.category))
+      for (const cat of extraCats) {
+        groups.push({
+          category: cat,
+          articles: remaining.filter((a) => a.category === cat),
+        })
+      }
+    }
+
+    return groups
+  }, [filteredArticles, report.summary.byCategory])
 
   const checkedCount = report.articles.filter((a) => a.checked).length
+
+  /** カテゴリ別件数の上位を表示用に整形 */
+  const categoryCountsDisplay = useMemo(() => {
+    const entries = Object.entries(report.summary.byCategory ?? {})
+      .sort(([, a], [, b]) => b - a)
+    return entries
+  }, [report.summary.byCategory])
 
   return (
     <div>
@@ -59,12 +92,13 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
         <h1 className="font-display text-3xl font-bold text-[var(--color-ink)]">
           {formatDateHeading(report.date)}
         </h1>
-        <div className="flex items-center gap-4 text-sm font-mono text-[var(--color-ink-tertiary)]">
+        <div className="flex items-center gap-3 text-sm font-mono text-[var(--color-ink-tertiary)] flex-wrap">
           <span>{report.summary.total}件</span>
-          <span className="text-[var(--color-rank-s)]">S:{report.summary.S}</span>
-          <span className="text-[var(--color-rank-a)]">A:{report.summary.A}</span>
-          <span className="text-[var(--color-rank-b)]">B:{report.summary.B}</span>
-          <span className="text-[var(--color-rank-c)]">C:{report.summary.C}</span>
+          {categoryCountsDisplay.map(([cat, count]) => (
+            <span key={cat} className="text-[var(--color-ink-secondary)]">
+              {cat}:{count}
+            </span>
+          ))}
           {checkedCount > 0 && (
             <span className="text-green-600 dark:text-green-400">
               ✓ {checkedCount}件選択中
@@ -87,8 +121,8 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
         filters={filters}
         onChange={setFilters}
         categories={categories}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
+        selectedCategories={selectedCategories}
+        onCategoryChange={setSelectedCategories}
       />
 
       {/* フィルタ結果の件数 */}
@@ -98,15 +132,31 @@ export function HeadlineList({ report, onToggleCheck }: Props) {
         </p>
       )}
 
-      {/* 記事カードリスト: ワイド画面で2カラムグリッド */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-        {filteredArticles.map((article, index) => (
-          <HeadlineCard
-            key={article.id}
-            article={article}
-            onToggleCheck={() => onToggleCheck(article.id)}
-            delay={index * 20}
-          />
+      {/* カテゴリ別記事リスト */}
+      <div className="space-y-8">
+        {groupedByCategory.map((group) => (
+          <section key={group.category}>
+            {/* カテゴリヘッダー */}
+            <div className="flex items-center gap-3 mb-3">
+              <h2 className="font-display text-lg font-semibold text-[var(--color-ink)]">
+                {group.category}
+              </h2>
+              <span className="text-xs font-mono text-[var(--color-ink-tertiary)]">
+                {group.articles.length}件
+              </span>
+            </div>
+            {/* カードグリッド */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              {group.articles.map((article, index) => (
+                <HeadlineCard
+                  key={article.id}
+                  article={article}
+                  onToggleCheck={() => onToggleCheck(article.id)}
+                  delay={index * 20}
+                />
+              ))}
+            </div>
+          </section>
         ))}
       </div>
 

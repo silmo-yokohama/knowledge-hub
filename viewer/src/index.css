@@ -9,12 +9,6 @@
   --font-body: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* ランク別カラー */
-  --color-rank-s: #C41E3A;
-  --color-rank-a: #B8860B;
-  --color-rank-b: #2563EB;
-  --color-rank-c: #6B7280;
-
   /* ソース別カラー */
   --color-source-hatena: #00A4DE;
   --color-source-yahoo: #FF0033;

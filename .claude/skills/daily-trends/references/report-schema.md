@@ -13,10 +13,11 @@
   "dataSources": ["はてなブックマーク", "Yahoo ニュース", "Reddit"],
   "summary": {
     "total": 56,
-    "S": 16,
-    "A": 14,
-    "B": 13,
-    "C": 13
+    "byCategory": {
+      "AI/LLM": 15,
+      "フロントエンド": 12,
+      "野球": 5
+    }
   },
   "articles": [
     {
@@ -29,7 +30,6 @@
       "score": 120,
       "scoreLabel": "120 users",
       "subreddit": null,
-      "rank": "S",
       "summary": "Claude Code の新機能がリリースされ、スキル機能が大幅に強化された",
       "checked": false
     }
@@ -53,9 +53,16 @@
 | `date` | string | レポート日付（`YYYY-MM-DD`） |
 | `generatedAt` | string | 生成日時（ISO 8601） |
 | `dataSources` | string[] | データソース名一覧 |
-| `summary` | object | 記事総数・ランク別件数 |
+| `summary` | object | 記事総数・カテゴリ別件数 |
 | `articles` | Article[] | 記事配列 |
 | `trendAnalysis` | TrendInsight[] | その日のトレンド分析（3〜5件） |
+
+### Summary
+
+| フィールド | 型 | 説明 |
+|-----------|-----|------|
+| `total` | number | 記事総数 |
+| `byCategory` | object | カテゴリ名をキー、件数を値とするオブジェクト |
 
 ### Article
 
@@ -70,7 +77,6 @@
 | `score` | number | 数値スコア（はてブ数 / Redditポイント / Yahooは `0`） |
 | `scoreLabel` | string | 表示用スコア（`"210 users"` / `"ITmedia NEWS"` / `"735pt 100comments"`） |
 | `subreddit` | string \| null | Redditのsubreddit名（例: `"r/ClaudeAI"`）、Reddit以外は `null` |
-| `rank` | string | ランク: `"S"` / `"A"` / `"B"` / `"C"` |
 | `summary` | string | 概要（30〜50文字程度の1行要約） |
 | `checked` | boolean | チェック状態（初期値 `false`、ビューアで更新） |
 
@@ -84,8 +90,8 @@
 
 ## 補足ルール
 
-- 各ランク内では記事を関連度の高い順にソートする（はてブ記事はブックマーク数も考慮）
-- Dランク（対象外）の記事はレポートに含めない
+- 記事はカテゴリ別にグループ化し、各カテゴリ内ではスコア降順でソートする
+- PROFILE.mdのどの興味領域にも該当しない記事はレポートに含めない
 - 過去にDeepDivesで詳細分析済みの記事はレポートに含めない
 - `checked` フィールドの初期値は `false`。ビューアのチェックボックスで更新される
 - 概要は記事の内容を1行（30〜50文字程度）で要約する

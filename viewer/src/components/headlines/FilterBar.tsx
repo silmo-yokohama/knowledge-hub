@@ -1,7 +1,6 @@
-import type { Rank, Source } from '../../types/headline.ts'
+import type { Source } from '../../types/headline.ts'
 
 export interface Filters {
-  ranks: Set<Rank>
   sources: Set<Source>
   searchText: string
   showCheckedOnly: boolean
@@ -12,29 +11,22 @@ interface Props {
   onChange: (filters: Filters) => void
   /** 利用可能なカテゴリ一覧 */
   categories: string[]
-  selectedCategory: string | null
-  onCategoryChange: (category: string | null) => void
+  /** 選択中のカテゴリ（空 = 全選択） */
+  selectedCategories: Set<string>
+  onCategoryChange: (categories: Set<string>) => void
 }
 
 /**
  * フィルターバー
- * ランク / ソース / カテゴリ / テキスト検索 / チェック状態で絞り込み
+ * ソース / カテゴリ / テキスト検索 / チェック状態で絞り込み
  */
 export function FilterBar({
   filters,
   onChange,
   categories,
-  selectedCategory,
+  selectedCategories,
   onCategoryChange,
 }: Props) {
-  /** ランクトグル */
-  const toggleRank = (rank: Rank) => {
-    const next = new Set(filters.ranks)
-    if (next.has(rank)) next.delete(rank)
-    else next.add(rank)
-    onChange({ ...filters, ranks: next })
-  }
-
   /** ソーストグル */
   const toggleSource = (source: Source) => {
     const next = new Set(filters.sources)
@@ -43,28 +35,18 @@ export function FilterBar({
     onChange({ ...filters, sources: next })
   }
 
+  /** カテゴリトグル */
+  const toggleCategory = (category: string) => {
+    const next = new Set(selectedCategories)
+    if (next.has(category)) next.delete(category)
+    else next.add(category)
+    onCategoryChange(next)
+  }
+
   return (
     <div className="space-y-3 mb-6">
-      {/* 上段: ランク + ソース + チェック */}
+      {/* 上段: ソース + チェック */}
       <div className="flex items-center gap-4 flex-wrap">
-        {/* ランクフィルタ */}
-        <div className="flex items-center gap-1.5">
-          <span className="text-[11px] font-mono text-[var(--color-ink-tertiary)] mr-1">
-            RANK
-          </span>
-          {(['S', 'A', 'B', 'C'] as Rank[]).map((rank) => (
-            <RankToggle
-              key={rank}
-              rank={rank}
-              active={filters.ranks.has(rank)}
-              onClick={() => toggleRank(rank)}
-            />
-          ))}
-        </div>
-
-        {/* 区切り線 */}
-        <div className="w-px h-5 bg-[var(--color-border)]" />
-
         {/* ソースフィルタ */}
         <div className="flex items-center gap-1.5">
           <span className="text-[11px] font-mono text-[var(--color-ink-tertiary)] mr-1">
@@ -109,9 +91,42 @@ export function FilterBar({
         </button>
       </div>
 
-      {/* 下段: テキスト検索 + カテゴリ */}
+      {/* 中段: カテゴリ */}
+      {categories.length > 0 && (
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[11px] font-mono text-[var(--color-ink-tertiary)] mr-1">
+            CATEGORY
+          </span>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => toggleCategory(cat)}
+              className={`text-[11px] px-2 py-1 rounded-md font-medium
+                         transition-all duration-200 cursor-pointer border
+                         ${
+                           selectedCategories.has(cat)
+                             ? 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]'
+                             : 'border-[var(--color-border)] text-[var(--color-ink-tertiary)] hover:text-[var(--color-ink-secondary)] hover:border-[var(--color-ink-tertiary)]'
+                         }`}
+            >
+              {cat}
+            </button>
+          ))}
+          {/* 選択中の場合、全解除ボタンを表示 */}
+          {selectedCategories.size > 0 && (
+            <button
+              onClick={() => onCategoryChange(new Set())}
+              className="text-[10px] px-1.5 py-0.5 text-[var(--color-ink-tertiary)]
+                         hover:text-[var(--color-ink-secondary)] cursor-pointer"
+            >
+              リセット
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* 下段: テキスト検索 */}
       <div className="flex items-center gap-3">
-        {/* テキスト検索 */}
         <div className="relative flex-1 max-w-sm">
           <svg
             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-ink-tertiary)]"
@@ -140,62 +155,8 @@ export function FilterBar({
                        transition-colors duration-200"
           />
         </div>
-
-        {/* カテゴリ選択 */}
-        {categories.length > 0 && (
-          <select
-            value={selectedCategory ?? ''}
-            onChange={(e) =>
-              onCategoryChange(e.target.value || null)
-            }
-            className="text-sm px-3 py-1.5 rounded-lg border border-[var(--color-border)]
-                       bg-[var(--color-surface-raised)] text-[var(--color-ink)]
-                       focus:outline-none focus:border-[var(--color-accent)]
-                       transition-colors duration-200 cursor-pointer"
-          >
-            <option value="">全カテゴリ</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        )}
       </div>
     </div>
-  )
-}
-
-/** ランクトグルボタン */
-function RankToggle({
-  rank,
-  active,
-  onClick,
-}: {
-  rank: Rank
-  active: boolean
-  onClick: () => void
-}) {
-  const colorMap: Record<Rank, string> = {
-    S: 'var(--color-rank-s)',
-    A: 'var(--color-rank-a)',
-    B: 'var(--color-rank-b)',
-    C: 'var(--color-rank-c)',
-  }
-
-  return (
-    <button
-      onClick={onClick}
-      className="w-7 h-7 rounded-md text-xs font-mono font-bold
-                 transition-all duration-200 cursor-pointer border"
-      style={{
-        color: active ? 'white' : colorMap[rank],
-        backgroundColor: active ? colorMap[rank] : 'transparent',
-        borderColor: active ? colorMap[rank] : `color-mix(in srgb, ${colorMap[rank]} 30%, transparent)`,
-      }}
-    >
-      {rank}
-    </button>
   )
 }
 

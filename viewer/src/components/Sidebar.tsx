@@ -8,7 +8,7 @@ interface Props {
 
 /**
  * 日付選択サイドバー
- * 利用可能な日付をリスト表示し、ランク別件数バッジを表示
+ * 利用可能な日付をリスト表示し、カテゴリ別件数を表示
  */
 export function Sidebar({ dates, loading }: Props) {
   if (loading) {
@@ -50,17 +50,23 @@ export function Sidebar({ dates, loading }: Props) {
                  }`
               }
             >
-              {/* 日付 */}
-              <div className="font-display text-base font-semibold text-[var(--color-ink)]">
-                {formatDate(entry.date)}
+              {/* 日付と件数 */}
+              <div className="flex items-baseline justify-between">
+                <span className="font-display text-base font-semibold text-[var(--color-ink)]">
+                  {formatDate(entry.date)}
+                </span>
+                <span className="text-[11px] font-mono text-[var(--color-ink-tertiary)]">
+                  {entry.summary.total}件
+                </span>
               </div>
-              {/* ランク別件数 */}
-              <div className="flex gap-2 mt-2">
-                <RankPill rank="S" count={entry.summary.S} />
-                <RankPill rank="A" count={entry.summary.A} />
-                <RankPill rank="B" count={entry.summary.B} />
-                <RankPill rank="C" count={entry.summary.C} />
-              </div>
+              {/* カテゴリ別件数（上位3つ） */}
+              {entry.summary.byCategory && (
+                <div className="flex gap-1.5 mt-2 flex-wrap">
+                  {getTopCategories(entry.summary.byCategory, 3).map(([cat, count]) => (
+                    <CategoryPill key={cat} category={cat} count={count} />
+                  ))}
+                </div>
+              )}
             </NavLink>
           ))}
         </div>
@@ -69,25 +75,23 @@ export function Sidebar({ dates, loading }: Props) {
   )
 }
 
-/** ランク別件数ピル */
-function RankPill({ rank, count }: { rank: string; count: number }) {
-  const colorMap: Record<string, string> = {
-    S: 'var(--color-rank-s)',
-    A: 'var(--color-rank-a)',
-    B: 'var(--color-rank-b)',
-    C: 'var(--color-rank-c)',
-  }
+/** カテゴリ別件数ピル */
+function CategoryPill({ category, count }: { category: string; count: number }) {
   return (
     <span
-      className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded"
-      style={{
-        color: colorMap[rank],
-        backgroundColor: `color-mix(in srgb, ${colorMap[rank]} 12%, transparent)`,
-      }}
+      className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded
+                 text-[var(--color-ink-secondary)] bg-[var(--color-surface-hover)]"
     >
-      {rank}:{count}
+      {category}:{count}
     </span>
   )
+}
+
+/** カテゴリ別件数の上位N件を返す */
+function getTopCategories(byCategory: Record<string, number>, n: number): [string, number][] {
+  return Object.entries(byCategory)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, n)
 }
 
 /** 日付フォーマット: "2026-02-09" → "2月9日 (日)" */

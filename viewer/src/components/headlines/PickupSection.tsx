@@ -76,10 +76,10 @@ export function PickupSection({ trends, articles, onToggleCheck }: Props) {
                                      line-clamp-1 block flex-1 min-w-0"
                         >
                           <span
-                            className="inline-block text-[9px] font-mono font-bold px-1 py-0.5 rounded text-white mr-1 align-middle"
-                            style={{ backgroundColor: getRankColor(article.rank) }}
+                            className="inline-block text-[9px] font-mono px-1 py-0.5 rounded mr-1 align-middle
+                                       text-[var(--color-ink-tertiary)] bg-[var(--color-surface-hover)]"
                           >
-                            {article.rank}
+                            {article.category}
                           </span>
                           {article.titleJa ?? article.title}
                         </a>
@@ -94,15 +94,4 @@ export function PickupSection({ trends, articles, onToggleCheck }: Props) {
       </div>
     </section>
   )
-}
-
-/** ランクに応じた色を返す */
-function getRankColor(rank: string): string {
-  const map: Record<string, string> = {
-    S: 'var(--color-rank-s)',
-    A: 'var(--color-rank-a)',
-    B: 'var(--color-rank-b)',
-    C: 'var(--color-rank-c)',
-  }
-  return map[rank] ?? 'var(--color-rank-c)'
 }

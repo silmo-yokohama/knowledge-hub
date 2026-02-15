@@ -1,9 +1,6 @@
 /** 記事の取得元 */
 export type Source = 'hatena' | 'yahoo' | 'reddit'
 
-/** 評価ランク */
-export type Rank = 'S' | 'A' | 'B' | 'C'
-
 /** 個別記事 */
 export interface Article {
   /** 一意なID（URLベースで生成） */
@@ -24,8 +21,6 @@ export interface Article {
   scoreLabel: string
   /** subreddit名（Reddit記事のみ） */
   subreddit: string | null
-  /** 評価ランク */
-  rank: Rank
   /** 概要文（30〜50文字） */
   summary: string
   /** チェック状態（detail-catch-up の対象選定に使用） */
@@ -42,13 +37,10 @@ export interface TrendInsight {
   relatedArticleIds: string[]
 }
 
-/** ランク別件数サマリー */
+/** カテゴリ別件数サマリー */
 export interface Summary {
   total: number
-  S: number
-  A: number
-  B: number
-  C: number
+  byCategory: Record<string, number>
 }
 
 /** ヘッドラインレポート全体 */
@@ -61,7 +53,7 @@ export interface HeadlineReport {
   dataSources: string[]
   /** 件数サマリー */
   summary: Summary
-  /** 記事一覧（ランク順→スコア順でソート済み） */
+  /** 記事一覧（カテゴリ別→スコア順でソート済み） */
   articles: Article[]
   /** トレンド分析（その日のホットトピック） */
   trendAnalysis: TrendInsight[]

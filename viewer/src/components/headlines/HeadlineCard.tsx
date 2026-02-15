@@ -10,15 +10,13 @@ interface Props {
 
 /**
  * 記事カードコンポーネント
- * 左ボーダーのランク色、チェックボックス、お気に入り、メタ情報を表示
+ * チェックボックス、カテゴリ、ソース、メタ情報を表示
  */
 export function HeadlineCard({
   article,
   onToggleCheck,
   delay = 0,
 }: Props) {
-  const rankColor = getRankColor(article.rank)
-
   return (
     <article
       className={`group relative rounded-lg border transition-all duration-300
@@ -29,8 +27,6 @@ export function HeadlineCard({
                       : 'bg-[var(--color-surface-raised)] border-[var(--color-border-subtle)] hover:border-[var(--color-border)]'
                   }`}
       style={{
-        borderLeftWidth: '3px',
-        borderLeftColor: rankColor,
         animationDelay: `${delay}ms`,
       }}
     >
@@ -82,17 +78,6 @@ export function HeadlineCard({
 
           {/* メタ情報 */}
           <div className="flex items-center gap-2 mt-2 flex-wrap">
-            {/* ランクバッジ */}
-            <span
-              className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded"
-              style={{
-                color: 'white',
-                backgroundColor: rankColor,
-              }}
-            >
-              {article.rank}
-            </span>
-
             {/* カテゴリ */}
             <span className="text-[11px] font-medium text-[var(--color-ink-secondary)]
                            px-1.5 py-0.5 rounded bg-[var(--color-surface-hover)]">
@@ -128,16 +113,7 @@ export function HeadlineCard({
   )
 }
 
-function getRankColor(rank: string): string {
-  const map: Record<string, string> = {
-    S: 'var(--color-rank-s)',
-    A: 'var(--color-rank-a)',
-    B: 'var(--color-rank-b)',
-    C: 'var(--color-rank-c)',
-  }
-  return map[rank] ?? 'var(--color-rank-c)'
-}
-
+/** ソース別の色を返す */
 function getSourceColor(source: string): string {
   const map: Record<string, string> = {
     hatena: 'var(--color-source-hatena)',
@@ -147,6 +123,7 @@ function getSourceColor(source: string): string {
   return map[source] ?? 'var(--color-ink-tertiary)'
 }
 
+/** ソース別の表示名を返す */
 function getSourceLabel(source: string): string {
   const map: Record<string, string> = {
     hatena: 'はてブ',

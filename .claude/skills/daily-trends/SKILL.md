@@ -18,19 +18,18 @@ PROFILE.mdの興味領域に基づいてマッチング評価・分類したレ�
 
 Read ツールで `/home/a/00.knowledge-hub/PROFILE.md` を読み込み、ユーザーの興味領域を把握する。
 
-特に以下のセクションに注目:
-- 「さらに深掘りしたい分野」→ Sランク評価の対象
-- 「まだ詳しくない分野」→ Aランク評価の対象
-- 「仕事分野」「趣味分野」→ B/Cランク評価の対象
+特に「興味領域」セクションに注目:
+- 各記事がいずれかの興味領域に該当するかの判断基準となる
+- 該当しない記事はレポートから除外される
 
 ### Step 2: 日付と出力先の確認
 
 1. 今日の日付を確認する（YYYY-MM-DD形式）
 2. 出力先ディレクトリ `01.Trends/Headlines/YYYY-MM/` が存在しない場合は作成する
 3. 同日のレポート `YYYY-MM-DD.json` が既に存在する場合は、**ユーザーに上書きの確認を取る**
-4. `01.Trends/DeepDives/` 配下の全ファイルをGlobツールで取得し、各ファイルの先頭から「元記事」URLを抽出して、**過去に詳細分析済みの記事URLリスト**を作成する
-   - パターン: `/home/a/00.knowledge-hub/01.Trends/DeepDives/**/*.md`
-   - 各ファイルの `> 元記事:` 行からURLを取得する
+4. Grepツールで `> 元記事:` を一括検索し、**過去に詳細分析済みの記事URLリスト**を作成する
+   - `Grep pattern="> 元記事:" path="/home/a/00.knowledge-hub/01.Trends/DeepDives/" output_mode="content"`
+   - 1回のGrepで全ファイルの該当行が返される。各行の `](URL)` 部分からURLを抽出する
    - このリストに含まれるURLの記事は、後のマッチング評価でスキップする
 
 ### Step 3: はてなブックマーク人気エントリーの取得
@@ -50,11 +49,15 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_hatena_rss.py it knowledge econom
 Bashツールで以下のコマンドを実行し、Yahoo ニュースの最新記事を取得する:
 
 ```bash
-python3 /home/a/00.knowledge-hub/scripts/fetch_yahoo_rss.py it sports
+python3 /home/a/00.knowledge-hub/scripts/fetch_yahoo_rss.py it sports fullcount baseballc bballk kana
 ```
 
 - 出力はJSON形式
-- **トークン節約のため `it sports` の2フィードのみ取得する**（全フィード取得は約700件になり非効率）
+- **トークン節約のため6フィードのみ取得する**（全フィード取得は約700件になり非効率）
+- `it` `sports`: IT・スポーツの一般記事
+- `fullcount` `baseballc`: 野球専門メディア（ベイスターズ等の詳細記事を拾う）
+- `bballk`: バスケ専門メディア（横浜エクセレンス等の詳細記事を拾う）
+- `kana`: 神奈川新聞（横浜・神奈川のローカルニュース）
 - `articles` 配列の各要素に `title`, `url`, `date`, `source`, `feed`, `feed_label`, `description` が含まれる
 - はてブ記事と URL が重複する記事は除外する
 - エラーが発生した場合は `errors` フィールドを確認し、取得できたフィードのデータで続行する
@@ -82,28 +85,25 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
 - Yahooニュースの記事はブクマ数がないため、ソース名（`source` フィールド）をブクマ数の代わりに表示する
 - Redditの記事はスコアとコメント数を表示する
 
-### Step 7: マッチング評価（タイトルベースで高速判定）
+### Step 7: カテゴリ分類とフィルタリング（タイトルベースで高速判定）
 
-収集した全記事に対して、 `references/matching-criteria.md` の基準に従いランク付けを行う。
+収集した全記事に対して、 `references/matching-criteria.md` の基準に従いカテゴリ分類を行う。
 
 **トークン節約**: 評価は**タイトルのみ**で判定する。`description` フィールドはタイトルだけでは判断が難しい場合にのみ参照する。
 
 **前処理**:
 - Step 2 で作成した「過去に詳細分析済みの記事URLリスト」に含まれる記事を除外する
 
-**評価の方法**:
-- 記事のタイトル、概要、タグを総合的に分析する
-- PROFILE.mdの興味領域との関連度をAIの文脈理解力で判断する
-- キーワードの完全一致だけでなく、意味的な関連性も考慮する
+**分類の方法**:
+- 記事タイトルから「何について書かれた記事か」を理解する
+- PROFILE.mdの興味領域のいずれかに該当するか判定する
+- 該当する場合 → `references/matching-criteria.md` のカテゴリ一覧から適切なカテゴリを割り当てる
+- どの興味領域にも該当しない場合 → レポートから除外する（ブクマ500以上は例外）
+- **記事の内容で判断する**（AI規制法案 → 「AI/LLM」、フリーランス新法 → 「キャリア/ビジネス」）
 
-**評価ランク**:
-| ランク | 点数 | 対象 |
-|--------|------|------|
-| S | 5 | 「深掘りしたい分野」直結（AI/LLM, Next.js/Nuxt, Claude Code, UI/UX等） |
-| A | 4 | 「まだ詳しくない分野」や「仕事分野」関連（DevOps, Go/Python, DDD等） |
-| B | 3 | 仕事分野の周辺や趣味分野（個人開発, 横浜DeNA, ゲーム等） |
-| C | 2 | 一般ニュース領域（政治, 経済, スポーツ全般） |
-| D | 1 | 上記に該当しない → レポートに含めない |
+**ソート**:
+- 記事はカテゴリ別にグループ化する
+- 各カテゴリ内ではスコア（はてブ数 / Redditポイント）の降順でソートする
 
 ### Step 8: レポート生成
 
@@ -113,7 +113,7 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
 - `date`: レポート日付（`YYYY-MM-DD`）
 - `generatedAt`: 生成日時（ISO 8601）
 - `dataSources`: データソース一覧
-- `summary`: 記事総数・ランク別件数 `{ total, S, A, B, C }`
+- `summary`: 記事総数・カテゴリ別件数 `{ total, byCategory: { "AI/LLM": 15, ... } }`
 - `articles`: 記事配列（各記事は以下のフィールドを持つ）
   - `id`: URLのSHA-256ハッシュ先頭8文字
   - `title`: 記事タイトル
@@ -124,7 +124,6 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
   - `score`: 数値スコア（はてブ数 / Redditポイント / Yahooは `0`）
   - `scoreLabel`: 表示用スコア（`"210 users"` / `"ITmedia NEWS"` / `"735pt 100comments"`）
   - `subreddit`: Redditの場合のみ（例: `"r/ClaudeAI"`）、それ以外は `null`
-  - `rank`: ランク（`"S"` / `"A"` / `"B"` / `"C"`）
   - `summary`: 概要（30〜50文字程度の1行要約）
   - `checked`: `false`（初期値、ビューアでチェック）
 - `trendAnalysis`: その日のトレンド分析（3〜5件）。カテゴリに関係なく、複数の記事に共通するテーマや話題を横断的に分析する
@@ -151,11 +150,34 @@ Write ツールでレポートをJSON形式で以下のパスに保存する:
 - `JSON.stringify` 相当の整形済みJSON（インデント2スペース）で出力する
 - `ensure_ascii=False` 相当で日本語はそのまま出力する
 
-### Step 10: 完了報告
+### Step 10: Git コミットとプッシュ
+
+レポートファイルの保存後、以下のGitコマンドを順番に実行する:
+
+1. レポートファイルをステージングに追加:
+   ```bash
+   git add 01.Trends/Headlines/YYYY-MM/YYYY-MM-DD.json
+   ```
+
+2. コミット:
+   ```bash
+   git commit -m "docs: YYYY-MM-DD のトレンドレポートを追加"
+   ```
+
+3. プッシュ:
+   ```bash
+   git push
+   ```
+
+- 未コミットの変更が他にあっても、**レポートファイルのみ**を add する
+- エラーが発生した場合はエラー内容を完了報告に含めて続行する
+
+### Step 11: 完了報告
 
 レポート生成が完了したら、以下を報告する:
 - 生成したレポートのパス
 - 収集した記事の総数とランク別の内訳
+- Gitコミット・プッシュの結果（成功/失敗）
 - エラーがあった場合はその内容
 - 「ビューア（`cd viewer && npm run dev`）で記事をチェックし、`/detail-catch-up` を実行すると詳細分析レポートを生成できます」と案内する
 
