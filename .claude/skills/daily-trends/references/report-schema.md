@@ -30,6 +30,7 @@
       "score": 120,
       "scoreLabel": "120 users",
       "subreddit": null,
+      "publishedDate": "2026-02-09",
       "summary": "Claude Code の新機能がリリースされ、スキル機能が大幅に強化された",
       "checked": false
     }
@@ -77,6 +78,7 @@
 | `score` | number | 数値スコア（はてブ数 / Redditポイント / Yahooは `0`） |
 | `scoreLabel` | string | 表示用スコア（`"210 users"` / `"ITmedia NEWS"` / `"735pt 100comments"`） |
 | `subreddit` | string \| null | Redditのsubreddit名（例: `"r/ClaudeAI"`）、Reddit以外は `null` |
+| `publishedDate` | string | 記事の公開日（`YYYY-MM-DD`形式） |
 | `summary` | string | 概要（30〜50文字程度の1行要約） |
 | `checked` | boolean | チェック状態（初期値 `false`、ビューアで更新） |
 

@@ -51,7 +51,7 @@
       "scoreLabel": "891 users",
       "subreddit": null,
       "summary": "山形県南陽市が公開した生成AI活用プロンプト集748例が話題に",
-      "checked": false
+      "checked": true
     },
     {
       "id": "1ed67d91",
@@ -116,7 +116,7 @@
       "scoreLabel": "281pt 19comments",
       "subreddit": "r/LocalLLaMA",
       "summary": "ローカルLLMコミュニティで話題のAI関連ミーム",
-      "checked": false
+      "checked": true
     },
     {
       "id": "d5358171",
@@ -129,7 +129,7 @@
       "scoreLabel": "265 users",
       "subreddit": null,
       "summary": "Claude Code最適化のためのtmux・ターミナル・通知設定まとめ",
-      "checked": false
+      "checked": true
     },
     {
       "id": "37b7c88e",
@@ -428,7 +428,7 @@
       "scoreLabel": "22 users",
       "subreddit": null,
       "summary": "AIコーディングの進化でプログラミングの楽しさが変わった体験記",
-      "checked": false
+      "checked": true
     },
     {
       "id": "8d5edfef",
@@ -597,7 +597,7 @@
       "scoreLabel": "21pt 2comments",
       "subreddit": "r/vuejs",
       "summary": "Vue向けトーストライブラリの詳細比較とライブデモ",
-      "checked": false
+      "checked": true
     },
     {
       "id": "ecee3020",
@@ -610,7 +610,7 @@
       "scoreLabel": "7pt 11comments",
       "subreddit": "r/nextjs",
       "summary": "Vercelのビルドマシン課金体系変更への不満と議論",
-      "checked": false
+      "checked": true
     },
     {
       "id": "2d55f6de",
@@ -623,7 +623,7 @@
       "scoreLabel": "6pt 14comments",
       "subreddit": "r/nextjs",
       "summary": "AI検索エンジン向けのNext.jsサイト最適化手法の議論",
-      "checked": false
+      "checked": true
     },
     {
       "id": "e3251d80",
@@ -636,7 +636,7 @@
       "scoreLabel": "3pt 10comments",
       "subreddit": "r/nextjs",
       "summary": "Next.jsとバックエンド分離構成での認証設計パターンの質問",
-      "checked": false
+      "checked": true
     },
     {
       "id": "deb324cb",
@@ -792,7 +792,7 @@
       "scoreLabel": "カナロコ by 神奈川新聞",
       "subreddit": null,
       "summary": "2年目の篠木が3回を完全投球、先発ローテーション入りを狙う",
-      "checked": false
+      "checked": true
     },
     {
       "id": "dec009af",
@@ -948,7 +948,7 @@
       "scoreLabel": "バスケットボールキング",
       "subreddit": null,
       "summary": "横浜エクセレンスが元Bリーグ経験者のPFハートと契約合意",
-      "checked": false
+      "checked": true
     },
     {
       "id": "34998967",
@@ -1104,7 +1104,7 @@
       "scoreLabel": "カナロコ by 神奈川新聞",
       "subreddit": null,
       "summary": "横浜橋通商店街で落語家がスマホ確定申告をPR",
-      "checked": false
+      "checked": true
     },
     {
       "id": "bc0ad265",

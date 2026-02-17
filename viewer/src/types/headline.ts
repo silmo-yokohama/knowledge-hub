@@ -21,6 +21,8 @@ export interface Article {
   scoreLabel: string
   /** subreddit名（Reddit記事のみ） */
   subreddit: string | null
+  /** 記事の公開日（YYYY-MM-DD） */
+  publishedDate?: string
   /** 概要文（30〜50文字） */
   summary: string
   /** チェック状態（detail-catch-up の対象選定に使用） */

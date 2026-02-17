@@ -100,6 +100,13 @@ export function HeadlineCard({
               {article.scoreLabel}
             </span>
 
+            {/* 公開日 */}
+            {article.publishedDate && (
+              <span className="text-[11px] font-mono text-[var(--color-ink-tertiary)]">
+                {formatPublishedDate(article.publishedDate)}
+              </span>
+            )}
+
             {/* subreddit */}
             {article.subreddit && (
               <span className="text-[11px] font-mono text-[var(--color-source-reddit)]">
@@ -111,6 +118,12 @@ export function HeadlineCard({
       </div>
     </article>
   )
+}
+
+/** 公開日を短い表示形式に変換する（例: "2/15"） */
+function formatPublishedDate(dateStr: string): string {
+  const date = new Date(dateStr + 'T00:00:00')
+  return `${date.getMonth() + 1}/${date.getDate()}`
 }
 
 /** ソース別の色を返す */

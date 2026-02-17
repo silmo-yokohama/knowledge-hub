@@ -50,7 +50,7 @@
       "scoreLabel": "712pt 132comments",
       "subreddit": "r/LocalLLaMA",
       "summary": "Qwen3.5の大型MoEモデル（397Bパラメータ、17Bアクティブ）がリリース",
-      "checked": false
+      "checked": true
     },
     {
       "id": "731c5812",
@@ -63,7 +63,7 @@
       "scoreLabel": "675pt 157comments",
       "subreddit": "r/ClaudeAI",
       "summary": "米国防総省がAI安全性ガードを巡りAnthropicへの制裁を検討",
-      "checked": false
+      "checked": true
     },
     {
       "id": "e8f6a49f",
@@ -206,7 +206,7 @@
       "scoreLabel": "135 users",
       "subreddit": null,
       "summary": "LLMエージェントによるコード生成に没頭する筆者が、プログラミングの変化を語る",
-      "checked": false
+      "checked": true
     },
     {
       "id": "459cc69c",
@@ -531,7 +531,7 @@
       "scoreLabel": "58 users",
       "subreddit": null,
       "summary": "IE11時代のクロスブラウザ対応の苦労を振り返るICS MEDIAの記事",
-      "checked": false
+      "checked": true
     },
     {
       "id": "72434028",

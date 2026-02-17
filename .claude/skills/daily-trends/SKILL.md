@@ -41,7 +41,7 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_hatena_rss.py it knowledge econom
 ```
 
 - 出力はJSON形式
-- `articles` 配列の各要素に `title`, `url`, `bookmarks`, `tags`, `category`, `description` が含まれる
+- `articles` 配列の各要素に `title`, `url`, `bookmarks`, `tags`, `category`, `description`, `date`（ISO 8601形式の公開日）が含まれる
 - エラーが発生した場合は `errors` フィールドを確認し、取得できたカテゴリのデータで続行する
 
 ### Step 4: Yahoo ニュース RSS の取得
@@ -72,7 +72,7 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
 
 - 出力はJSON形式
 - デフォルトで6つのsubreddit（programming, webdev, nextjs, vuejs, LocalLLaMA, ClaudeAI）から各10件取得
-- `articles` 配列の各要素に `title`, `url`, `permalink`, `score`, `num_comments`, `subreddit` が含まれる
+- `articles` 配列の各要素に `title`, `url`, `permalink`, `score`, `num_comments`, `subreddit`, `created_utc`（UNIXタイムスタンプの公開日）が含まれる
 - ピン留め投稿（stickied）は自動的に除外される
 - **英語のタイトルは後のレポート生成時に日本語訳を併記する**
 - エラーが発生した場合は `errors` フィールドを確認し、取得できたsubredditのデータで続行する
@@ -93,6 +93,10 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
 
 **前処理**:
 - Step 2 で作成した「過去に詳細分析済みの記事URLリスト」に含まれる記事を除外する
+- **公開日がレポート日付の3日以上前の記事を除外する**
+  - はてブ: `date` フィールド（ISO 8601）から日付を取得
+  - Yahoo: `date` フィールド（RFC 2822）から日付を取得
+  - Reddit: `created_utc` フィールド（UNIXタイムスタンプ）から日付を取得
 
 **分類の方法**:
 - 記事タイトルから「何について書かれた記事か」を理解する
@@ -124,6 +128,7 @@ python3 /home/a/00.knowledge-hub/scripts/fetch_reddit_hot.py
   - `score`: 数値スコア（はてブ数 / Redditポイント / Yahooは `0`）
   - `scoreLabel`: 表示用スコア（`"210 users"` / `"ITmedia NEWS"` / `"735pt 100comments"`）
   - `subreddit`: Redditの場合のみ（例: `"r/ClaudeAI"`）、それ以外は `null`
+  - `publishedDate`: 記事の公開日（`YYYY-MM-DD`形式）。各ソースの日付フィールドから変換する
   - `summary`: 概要（30〜50文字程度の1行要約）
   - `checked`: `false`（初期値、ビューアでチェック）
 - `trendAnalysis`: その日のトレンド分析（3〜5件）。カテゴリに関係なく、複数の記事に共通するテーマや話題を横断的に分析する
