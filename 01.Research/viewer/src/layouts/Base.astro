@@ -1,0 +1,149 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  count?: number;
+}
+
+const {
+  title,
+  description = 'Web調査を蓄積・閲覧するリサーチハブ',
+  count,
+} = Astro.props;
+const siteName = 'Research Hub';
+const fullTitle = title ? `${title} — ${siteName}` : siteName;
+const base = import.meta.env.BASE_URL;
+const home = base.replace(/\/$/, '') + '/';
+const isHome = Astro.url.pathname.replace(/\/$/, '') === base.replace(/\/$/, '');
+const year = 2026;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={`${base}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // ダーク既定。保存値があれば最優先、なければ初回のみ OS 設定に従う。
+      // 既定（class なし）= ダーク。ライトのときだけ .light を付与してチラつきを防ぐ。
+      (function () {
+        try {
+          var s = localStorage.getItem('theme');
+          if (s === 'light') {
+            document.documentElement.classList.add('light');
+          } else if (
+            !s &&
+            window.matchMedia('(prefers-color-scheme: light)').matches
+          ) {
+            document.documentElement.classList.add('light');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a class="brand" href={home}>
+          <span class="brand-mark">R</span>
+          <span class="brand-text">
+            <span class="brand-name">Research Hub</span>
+            <span class="brand-sub">Archive of Inquiry</span>
+          </span>
+        </a>
+
+        <nav class="sidebar-nav">
+          <a class="nav-link" href={home} aria-current={isHome ? 'page' : undefined}>
+            ⌗ リサーチ一覧
+          </a>
+        </nav>
+
+        <button
+          class="theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-label="テーマ切り替え"
+        >
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+
+        <div class="sidebar-foot">
+          <div class="foot-meta">
+            {typeof count === 'number' ? `${count} ENTRIES` : 'KNOWLEDGE BASE'}<br />
+            EST. {year}
+          </div>
+        </div>
+      </aside>
+
+      <div class="main">
+        <div class="content">
+          <slot />
+
+          <footer class="page-footer">
+            <span>RESEARCH HUB © {year}</span>
+            <span>BUILT WITH ASTRO · /research-log</span>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var light = document.documentElement.classList.toggle('light');
+          try {
+            localStorage.setItem('theme', light ? 'light' : 'dark');
+          } catch (e) {}
+          if (window.__rerenderMermaid) window.__rerenderMermaid();
+        });
+      })();
+    </script>
+
+    <script>
+      import mermaid from 'mermaid';
+
+      const nodes = Array.from(
+        document.querySelectorAll('pre.mermaid')
+      ) as HTMLElement[];
+
+      if (nodes.length > 0) {
+        const sources = nodes.map((n) => n.textContent || '');
+        const render = async () => {
+          // ダーク既定なので「.light が無い＝ダーク」。テーマ連動で図も切り替える。
+          const light = document.documentElement.classList.contains('light');
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: light ? 'neutral' : 'dark',
+            fontFamily: 'Geist Mono, IBM Plex Mono, monospace',
+            securityLevel: 'strict',
+          });
+          nodes.forEach((n, i) => {
+            n.removeAttribute('data-processed');
+            n.innerHTML = sources[i];
+          });
+          try {
+            await mermaid.run({ nodes });
+          } catch (e) {
+            console.error('mermaid render error', e);
+          }
+        };
+        (window as any).__rerenderMermaid = render;
+        render();
+      }
+    </script>
+  </body>
+</html>

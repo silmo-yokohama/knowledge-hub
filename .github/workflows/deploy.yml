@@ -1,0 +1,48 @@
+# Astro サイト（site/）をビルドして GitHub Pages にデプロイする。
+# 公開URL: https://silmo-yokohama.github.io/knowledge-hub/
+#
+# 事前設定（リポジトリ Settings → Pages → Build and deployment）:
+#   Source: "GitHub Actions" を選択しておくこと。
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # 01.Research/ 配下にビューア（viewer/）も研究 Markdown もあるためまとめて対象
+      - '01.Research/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時実行は1つに制限（進行中のデプロイは中断しない）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Astro site
+        uses: withastro/action@v3
+        with:
+          path: 01.Research/viewer
+          node-version: 24
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

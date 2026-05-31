@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const entries = (await getCollection('research')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const categories = [...new Set(entries.map((e) => e.data.category))].sort();
+const tags = [...new Set(entries.flatMap((e) => e.data.tags))].sort();
+const latest = entries[0]?.data.date;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pad = (n: number) => String(n).padStart(2, '0');
+const fmtDate = (d: Date) =>
+  `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+---
+
+<Base description="蓄積したリサーチの一覧" count={entries.length}>
+  <header class="dash-head">
+    <span class="eyebrow">Research Archive</span>
+    <h1 class="page-title">リサーチ・<br />アーカイブ</h1>
+    <p class="page-lead">
+      <code>/research-log</code> で深掘り調査した結果を蓄積する個人ナレッジベース。公式起点 × コミュニティ補完 × 反証検証で得た知見を、ブログや学習の素材として読み返せます。
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">{pad(entries.length)}</div>
+        <div class="stat-label">Researches</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">{pad(categories.length)}</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">{pad(tags.length)}</div>
+        <div class="stat-label">Tags</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num stat-num--date">
+          {latest ? fmtDate(latest) : '—'}
+        </div>
+        <div class="stat-label">Latest</div>
+      </div>
+    </div>
+  </header>
+
+  {
+    entries.length === 0 ? (
+      <div class="empty">
+        まだリサーチがありません。<code>/research-log</code> で調査すると
+        <code>01.Research/</code> に蓄積され、ここに並びます。
+      </div>
+    ) : (
+      <>
+        <div class="toolbar">
+          <h2>すべてのリサーチ</h2>
+          <span class="result-count" id="result-count">
+            {entries.length} 件
+          </span>
+        </div>
+
+        {categories.length > 1 && (
+          <div class="filter-group" data-filter-group="category">
+            <span class="filter-label">Category</span>
+            <button class="chip" data-value="" aria-pressed="true">
+              すべて
+            </button>
+            {categories.map((c) => (
+              <button class="chip" data-value={c} aria-pressed="false">
+                {c}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {tags.length > 0 && (
+          <div class="filter-group" data-filter-group="tag">
+            <span class="filter-label">Tag</span>
+            {tags.map((t) => (
+              <button class="chip" data-value={t} aria-pressed="false">
+                #{t}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div class="grid" id="card-grid">
+          {entries.map((e, i) => (
+            <a
+              class="card"
+              href={`${base}/research/${e.id}/`}
+              data-category={e.data.category}
+              data-tags={e.data.tags.join(' ')}
+              style={`animation-delay:${Math.min(i * 55, 500)}ms`}
+            >
+              <div class="card-top">
+                <span class="card-index">{pad(i + 1)}</span>
+                <span class="cat-badge">{e.data.category}</span>
+                <span class="spacer" />
+                <span class="card-date">{fmtDate(e.data.date)}</span>
+              </div>
+              <h3>{e.data.title}</h3>
+              {e.data.description && (
+                <p class="card-desc">{e.data.description}</p>
+              )}
+              <div class="card-foot">
+                <div class="card-tags">
+                  {e.data.tags.slice(0, 3).map((t) => (
+                    <span class="tag">{t}</span>
+                  ))}
+                </div>
+                {e.data.confidence && (
+                  <span class={`confidence ${e.data.confidence}`}>
+                    <span class="dot" />
+                    {e.data.confidence}
+                  </span>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div class="empty" id="no-match" hidden style="margin-top:18px">
+          条件に一致するリサーチがありません。
+        </div>
+      </>
+    )
+  }
+</Base>
+
+<script is:inline>
+  (function () {
+    var state = { category: '', tag: '' };
+    var grid = document.getElementById('card-grid');
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.card'));
+    var counter = document.getElementById('result-count');
+    var noMatch = document.getElementById('no-match');
+
+    function apply() {
+      var visible = 0;
+      cards.forEach(function (card) {
+        var cat = card.getAttribute('data-category') || '';
+        var tags = (card.getAttribute('data-tags') || '').split(' ');
+        var ok =
+          (!state.category || cat === state.category) &&
+          (!state.tag || tags.indexOf(state.tag) !== -1);
+        card.hidden = !ok;
+        if (ok) visible++;
+      });
+      if (counter) counter.textContent = visible + ' 件';
+      if (noMatch) noMatch.hidden = visible !== 0;
+    }
+
+    document.querySelectorAll('[data-filter-group]').forEach(function (group) {
+      var kind = group.getAttribute('data-filter-group');
+      group.querySelectorAll('.chip').forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          var v = chip.getAttribute('data-value') || '';
+          if (kind === 'tag') state.tag = state.tag === v ? '' : v;
+          else state.category = v;
+          group.querySelectorAll('.chip').forEach(function (c) {
+            var cv = c.getAttribute('data-value') || '';
+            var active = kind === 'tag' ? cv === state.tag : cv === state.category;
+            c.setAttribute('aria-pressed', active ? 'true' : 'false');
+          });
+          apply();
+        });
+      });
+    });
+  })();
+</script>
