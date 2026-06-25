@@ -1,266 +1,279 @@
 ---
-title: "Antigravity CLI を Google AI Pro / Ultra で使い倒す：できること・特徴・Claude Code / Codex との違い"
-description: "Google AI Pro 加入者向けに、Antigravity CLI（agy）で何ができるか・CLIの特徴・Claude Code / Codex との違い・独自性・Ultra アップグレードの差分を、公式起点＋コミュニティ補完＋反証検証で整理。"
+title: "Antigravity CLI（agy）の特徴・独自性・苦手なこと：IDE併用前提で、Claude Code ターミナルと何が違うか"
+description: "Antigravity IDE＋Claude Code を既に使っている人向けに、Antigravity CLI（agy）単体の特徴・IDEとの使い分け・CLIにしかできないこと・CLIが苦手なこと・claude/codexターミナルとの違い・料金プラン差を、公式起点＋コミュニティ補完＋反証検証で整理。"
 date: 2026-06-25
-tags: [antigravity, antigravity-cli, agy, google-ai-pro, google-ai-ultra, gemini, claude-code, openai-codex, ai-coding]
+tags: [antigravity, antigravity-cli, agy, google-ai-pro, google-ai-ultra, gemini, claude-code, openai-codex, ai-coding, headless]
 category: "AI"
 sources:
-  - title: "Google AI Pro and Ultra subscribers now have higher rate limits for Google Antigravity (blog.google, 2025-12)"
+  - title: "An important update: transitioning Gemini CLI to Antigravity CLI (Google Developers Blog, 2026-05-19)"
+    url: "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+    type: official
+  - title: "google-gemini/gemini-cli Discussion #27274（移行アナウンス・CLIの非同期オーケストレーション）"
+    url: "https://github.com/google-gemini/gemini-cli/discussions/27274"
+    type: official
+  - title: "Hands-on with Antigravity CLI（agy のモデル一覧・-p・権限モード）(Google Codelabs)"
+    url: "https://codelabs.developers.google.com/antigravity-cli-hands-on"
+    type: official
+  - title: "Accelerating Development with Antigravity CLI（headless・CI/CD・設定ファイル）(Google Codelabs)"
+    url: "https://codelabs.developers.google.com/genai-for-dev-antigravity-cli"
+    type: official
+  - title: "Agentic UI automation（組み込みBrowser Agentは agy CLI 未対応と明言）(Google Codelabs)"
+    url: "https://codelabs.developers.google.com/agentic-ui-automation-with-antigravity"
+    type: official
+  - title: "Developer knowledge MCP（2.0/IDE/CLI が中央MCP設定を共有）(Google Codelabs)"
+    url: "https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity"
+    type: official
+  - title: "Antigravity rate limits for Pro/Ultra（無料でGemini 3 Pro・有料は枠と優先）(blog.google)"
     url: "https://blog.google/feed/new-antigravity-rate-limits-pro-ultra-subsribers/"
     type: official
   - title: "New Google AI subscriptions / I/O 2026（Ultra 5x・20x、$250→$200）(blog.google)"
     url: "https://blog.google/products-and-platforms/products/google-one/google-ai-subscriptions/"
     type: official
-  - title: "Google One ヘルプ - AI Pro benefits（Antigravity 内の Claude 4.5 Sonnet / gpt-oss-120b）"
-    url: "https://support.google.com/googleone/answer/14534406"
-    type: official
-  - title: "Google One ヘルプ - AI Ultra benefits（5x/20x quota・Deep Think）"
+  - title: "Google One ヘルプ - AI Pro / AI Ultra benefits（Antigravity 内の Claude / gpt-oss・5x/20x・Deep Think）"
     url: "https://support.google.com/googleone/answer/16286513"
     type: official
-  - title: "An important update: transitioning Gemini CLI to Antigravity CLI (Google Developers Blog, 2026-05-19)"
-    url: "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
-    type: official
-  - title: "Hands-on with Antigravity CLI（agy のモデル一覧・コマンド）(Google Codelabs)"
-    url: "https://codelabs.developers.google.com/antigravity-cli-hands-on"
-    type: official
-  - title: "Getting Started with Google Antigravity（/browser・/artifact・4サーフェス）(Google Codelabs)"
-    url: "https://codelabs.developers.google.com/getting-started-google-antigravity"
-    type: official
-  - title: "Accelerating Development with Antigravity CLI（headless・設定ファイル）(Google Codelabs)"
-    url: "https://codelabs.developers.google.com/genai-for-dev-antigravity-cli"
-    type: official
-  - title: "Gemini 3 Deep Think（Ultra 限定）(blog.google)"
-    url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/"
-    type: official
-  - title: "gemini.google/subscriptions（Pro ¥2,900・Ultra 倍率）"
-    url: "https://gemini.google/subscriptions/"
-    type: official
-  - title: "OpenAI Codex CLI（公式 docs）"
+  - title: "OpenAI Codex CLI（公式 docs・pricing・in-app browser）"
     url: "https://developers.openai.com/codex/cli"
-    type: official
-  - title: "OpenAI Codex - pricing（ChatGPT プラン同梱）"
-    url: "https://developers.openai.com/codex/pricing"
-    type: official
-  - title: "OpenAI Codex - in-app browser（認証ページ非対応）"
-    url: "https://developers.openai.com/codex/app/browser"
     type: official
   - title: "Claude Code Docs - Overview / MCP / Chrome"
     url: "https://code.claude.com/docs/en/overview"
     type: official
-  - title: "I used Claude Code, Antigravity & Codex for a month (XDA, Parth Shah, 2026-05-20)"
-    url: "https://www.xda-developers.com/used-claude-code-google-antigravity-codex-for-month-have-clear-winner/"
+  - title: "Claude-Code-Antigravity-CLI bridge（agy -p の stdout バグを transcript 読取で回避・1.0.9でも継続）"
+    url: "https://github.com/SinanTufekci/agent-intern"
     type: community
-  - title: "Claude Code vs Antigravity 2.0（Jonas Braadbaart, metacircuits, 2026-06-08）"
-    url: "https://metacircuits.substack.com/p/claude-code-vs-antigravity-20-vs"
+  - title: "Antigravity CLI agy headless non-TTY stdout (CI) 解説 (antigravitylab.net, 2026-06-13)"
+    url: "https://antigravitylab.net/en/articles/integrations/antigravity-cli-agy-headless-non-tty-stdout-ci"
     type: community
-  - title: "Antigravity CLI: The agy Command Guide (aibuilderclub)"
+  - title: "Antigravity CLI: The agy Command Guide（承認ゲート/トークンオーバーヘッド/BYOK非対応）(aibuilderclub)"
     url: "https://www.aibuilderclub.com/blog/antigravity-cli-guide"
+    type: community
+  - title: "Claude Code司令塔×agy実装役（Gemini 3.5 Flash）併用（fallout, Qiita, 2026-06）"
+    url: "https://qiita.com/fallout/items/5097f0575b58f4c69b81"
+    type: community
+  - title: "Windows で agy が command not found（PATH継承/旧symlink）(ayago, Qiita, 2026-06-16)"
+    url: "https://qiita.com/ayago/items/207e4706183133985af9"
+    type: community
+  - title: "Claude Code vs Codex vs Antigravity 2.0 同一タスク比較（vinamrayadav, Medium, 2026-06-04）"
+    url: "https://medium.com/@myselfvinamrayadav/claude-code-vs-codex-vs-antigravity-2-0-i-ran-the-same-task-through-all-three-6172de9678cf"
     type: community
   - title: "Navigating Antigravity Pro quota limits（discuss.ai.google.dev）"
     url: "https://discuss.ai.google.dev/t/navigating-antigravity-pro-quota-limits/130212"
     type: community
-  - title: "Ultra: dramatic quota reduction after update（discuss.ai.google.dev）"
-    url: "https://discuss.ai.google.dev/t/ultra-dramatic-quota-reduction-after-update-this-needs-an-official-explanation/135526"
-    type: community
-  - title: "Ultra: Claude model quota even worse than Pro（discuss.ai.google.dev）"
-    url: "https://discuss.ai.google.dev/t/ultra-subscription-claude-model-quota-even-worse-than-pro/135870"
-    type: community
   - title: "クォータ節約・色で使い分ける（note/kino, 2026）"
     url: "https://note.com/kino_11/n/nf0d664528cdc"
-    type: community
-  - title: "Gemini 3 Pro × Opus 使い分け（note/biwakonbu, 2025-12-11）"
-    url: "https://note.com/biwakonbu/n/n77c8568a6758"
     type: community
 confidence: medium
 ---
 
 ## 📌 結論 (TL;DR)
 
-**Antigravity は「無料でも Gemini 3 Pro まで使える」のが最大の特徴。Pro（月¥2,900）に課金して増えるのは主に “実行枠（クォータ）と優先処理” で、機能そのものはほぼ無料と同じ。** あなたが Google AI Pro を「使いこなせていない」のは、機能不足ではなく **「クォータの設計を知らずにすぐ枠を溶かしている」可能性が高い**。
+**あなたの環境（Antigravity IDE の中で Claude Code を開いて開発）を前提にすると、Antigravity CLI（`agy`）の立ち位置はハッキリしている。**
 
-Antigravity CLI（コマンド `agy`、Go製、Gemini CLI の公式後継、2026-06-18 に旧 Gemini CLI を置き換え）の本質は、**1つの Google AI サブスクの中で Gemini 3.5 Flash / Gemini 3.1 Pro / Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS 120B を “選んで” ターミナルから使える点**。Claude Code（Claude 専用）や OpenAI Codex（GPT 専用）が自社モデル中心なのに対し、**複数ベンダーのフラッグシップを1契約・1ツールから切り替えられるのが Antigravity の効きどころ**（Anthropic への二重課金も不要）。
-
-ただし **「Antigravity CLI にしかできない独自機能」は厳密には少ない**：ブラウザ実機検証もマルチエージェント並列も MCP も、いまや Codex / Claude Code も持つ。独自性は “機能” より **“無料枠の太さ × モデルの品揃え × プラットフォーム統合（CLI/IDE/アプリ/SDK が同一ハーネス）”** にある。**Ultra（$100=5倍／$200=20倍、Deep Think 追加）は「並列を日常的に回す人」向け**で、軽〜中量なら Pro + Flash 中心運用で足りる。
+- `agy` の本質は **「GUI を捨てた代わりに “自動化・軽さ・分担” を取りに行くターミナル版」**。IDE と `agy` は **同一の agent harness・同一の MCP 設定を共有**するので、対話で使う限り **IDE でできることの大半は `agy` でもできる**。逆に言うと **GUI 目的なら IDE のままでよく、CLI に降りる動機は「スクリプト化・headless・リモート・単一バイナリの軽さ・並列の投げっぱなし」に限られる**。
+- **CLI にしかできないこと**＝`agy -p` の**非対話ワンショット**（パイプ／CI／cron に組み込む）、`--dangerously-skip-permissions` の自律実行、Node/Python 不要の**単一 Go バイナリ**で SSH/コンテナ/リモートに置ける軽さ、ターミナルを占有しない**非同期バックグラウンド並列**。
+- **CLI が苦手なこと**（ここが一番効く）：**組み込み Browser Agent（`/browser`）は agy CLI では未対応**（IDE/2.0 専用・公式明言）、**`agy -p` が非TTYで応答を stdout に出さない致命バグ**（CI/連携が壊れる）、**毎リクエストの固定トークン肥大でクォータが速く枯れる**、Windows の PATH 継承・symlink 破損、Agent Manager/Artifacts の**可視化が CLI では活きない**。
+- **claude（ターミナル）との比較**＝あなたが既に走らせている枠の直接の競合。`agy` が勝つのは「Google 枠で Gemini を実質無料で叩ける／単一バイナリで軽い／モデル切替」、負けるのは「コード品質・指示追従・成熟度・クォータの読みやすさ」。**“司令塔=Claude Code、実装役=agy(Gemini 3.5 Flash)” の分担**が実用解。
+- **料金プラン差は CLI 固有ではない**：Pro/Ultra で増えるのは**枠（クォータ）と優先度**で、IDE でも CLI でも共通（同一バックエンド）。Ultra は Pro 比 5x($100)/20x($200)＋Deep Think。
 
 ## 🔍 調査結果
 
-### 1. Google AI Pro でできること（Antigravity で）
+### 0. 前提整理 — あなたの環境における「CLI の位置」
 
-ポイントは **「Antigravity は無料でもかなり使える。Pro の価値は “枠と優先度” に集約される」** こと。
+あなたは **Antigravity IDE をシェル（エディタ）**にして、その中で **Claude Code（拡張＋ターミナル）**を主力にしている。この構図だと `agy`（CLI）は **「ターミナルで動くエージェント」というスロットで claude と真っ向から競合**する。だから問うべきは「IDE か CLI か」ではなく **「claude を回しているそのターミナルに、`agy` を足す/差し替える意味はあるか」**。答えは §2〜§5。
 
-- **無料プラン（Google アカウントのサインインのみ・カード不要）でも、Gemini 3 Pro・無制限のタブ補完・Agent Manager・Browser 統合の “全機能” が使える**。無料と有料で**機能差はほぼ無い**。
-- **Pro（¥2,900/月・約 $20）で増えるのは主に：①最も寛大なレート上限 ②優先処理（priority access）③クォータが “5時間ごと” にリフレッシュ**（無料は “週次” リフレッシュ）。
-- Pro では Gemini 3 Pro に加え、**Vertex AI Model Garden 経由の Claude（Sonnet）/ gpt-oss-120b** の利用枠が増える（公式ヘルプ明記）。
-- 課金は **「ベースライン枠＋超過分は Google One で AI クレジット追加購入」** の2層。クォータ消費は **エージェントの “作業量” に比例**（単純タスクは軽く、複雑な推論は重い）。
-- **⚠️ 重要な実態**：Pro の枠は体感「お試し層」に近い。コミュニティでは **「実コーディング45分で週次ベースラインに到達」「未使用なのに枠が消えた」「超過後 数日〜168時間ロックアウト」** の報告が多数（→ §6・実践 tips で対策）。
+### 1. Antigravity CLI（agy）の特徴
 
-**根拠**:
-- [blog.google - Antigravity rate limits for Pro/Ultra](https://blog.google/feed/new-antigravity-rate-limits-pro-ultra-subsribers/)
-- [Google One ヘルプ - AI Pro benefits](https://support.google.com/googleone/answer/14534406)
-- [discuss.ai.google.dev - Navigating Antigravity Pro quota limits](https://discuss.ai.google.dev/t/navigating-antigravity-pro-quota-limits/130212)
-
-**引用**:
-> "Google AI Pro and Ultra subscribers now receive priority access, featuring our highest, most generous rate limits with quotas that refresh every five hours. ... all users will continue to enjoy Gemini 3 Pro, unlimited tab code completions and access to all product features, such as the Agent Manager and Browser integration."
-> （AI Pro/Ultra 加入者は優先アクセスと、5時間ごとに更新される最も寛大なレート上限を得る。…全ユーザーは引き続き Gemini 3 Pro・無制限のタブ補完・Agent Manager や Browser 統合を含む全機能を利用できる。）
-> — [blog.google](https://blog.google/feed/new-antigravity-rate-limits-pro-ultra-subsribers/)
-
-> "AI Pro members receive higher usage limits for Gemini 3 Pro and other Vertex AI Model Garden models (e.g. Claude 4.5 Sonnet, gpt-oss-120b) within the Antigravity platform."
-> （AI Pro 会員は Antigravity 内で Gemini 3 Pro および他の Vertex AI Model Garden モデル〈例: Claude 4.5 Sonnet、gpt-oss-120b〉の利用枠が増える。）
-> — [Google One ヘルプ](https://support.google.com/googleone/answer/14534406)
-
-### 2. Antigravity CLI（agy）の特徴
-
-- **正体**：コマンドは `agy`、**Go製**で軽快。**Gemini CLI の公式後継**で、デスクトップアプリ「Antigravity 2.0」と**同一の agent harness（バックエンド）を共有**する。Antigravity プラットフォームは **「デスクトップアプリ／IDE／CLI／SDK」の4サーフェス構成**で、`agy` はその CLI 部分。
-- **モデル選択（最重要の特徴）**：`agy models` で一覧、`agy --model "..."` で起動時指定、セッション中は `/model`。選べるのは **Gemini 3.5 Flash（既定）/ Gemini 3.1 Pro / Claude Sonnet 4.6（Thinking）/ Claude Opus 4.6（Thinking）/ GPT-OSS 120B**。
-- **継承機能**：Gemini CLI の中核を継承し、**Agent Skills（宣言的 Markdown でスラッシュコマンド化）/ Hooks（実行前後フック）/ Subagents（非同期で並列委譲）/ Extensions（“Antigravity plugins” として）/ MCP（クライアントとしてローカル・リモート両対応）**。
-- **headless / 自動化**：`agy -p "..."` で非対話実行（CI/CD 向け）、`agy --dangerously-skip-permissions` で自律モード。
-- **設定ファイル**：本体 `~/.gemini/antigravity-cli/settings.json`、MCP は `~/.gemini/antigravity-cli/mcp_config.json`（ワークスペースは `.agents/mcp_config.json`）、コンテキスト/ルールは `GEMINI.md`・`AGENTS.md`（クロスツール標準）とグローバル `~/.gemini/GEMINI.md`、スキルは `.agents/skills/` または `~/.gemini/config/skills/`。
-- **インストール**：macOS/Linux `curl -fsSL https://antigravity.google/cli/install.sh | bash`、Windows PS `irm https://antigravity.google/cli/install.ps1 | iex`。初回に Google OAuth ログイン。
-- **CLI と GUI 機能の関係**：`/browser` でブラウザサブエージェント、`/artifact` で成果物レビューが CLI からも触れるが、**Agent Manager の可視化や Browser Subagent の本領はデスクトップアプリ／IDE 側**。CLI 単体から GUI 機能をフルに呼べるかは公式に明言なし（要注意）。
+- **正体**：コマンド `agy`、**Go製の単一バイナリ**（Node/Python ランタイム不要）で軽快。**Gemini CLI の公式後継**で、**デスクトップアプリ「Antigravity 2.0」と同一の agent harness（バックエンド）を共有**。Antigravity は「アプリ／IDE／CLI／SDK」の4サーフェス構成で、`agy` はその CLI。
+- **モデル選択（最大の特徴）**：`agy models` で一覧、`agy --model "..."` で起動時指定、セッション中は `/model`。選べるのは **Gemini 3.5 Flash（既定）/ Gemini 3.1 Pro / Claude Sonnet 4.6（Thinking）/ Claude Opus 4.6（Thinking）/ GPT-OSS 120B**。`--model` は **`-p` より前**に置かないと無視される引数順の癖あり。
+- **権限モード**：`request-review / proceed-in-sandbox / always-proceed / strict` の段階制。`--dangerously-skip-permissions` で全ツール自動承認（YOLO）。
+- **継承機能**：Agent Skills（宣言的 Markdown でスラッシュコマンド化）/ Hooks / Subagents（非同期で並列委譲）/ Extensions（“Antigravity plugins”）/ MCP（**クライアント**として、ローカル・リモート両対応）。
+- **設定ファイルは IDE と共有**：MCP は `~/.gemini/config/mcp_config.json` を **2.0／IDE／CLI で共有**。コンテキスト/ルールは `GEMINI.md`・`AGENTS.md`（クロスツール標準）。
 
 **根拠**:
 - [Google Developers Blog - Transitioning Gemini CLI to Antigravity CLI](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/)
-- [Codelabs - Hands-on with Antigravity CLI](https://codelabs.developers.google.com/antigravity-cli-hands-on)
-- [Codelabs - Getting Started with Google Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity)
+- [Codelabs - Hands-on with Antigravity CLI](https://codelabs.developers.google.com/antigravity-cli-hands-on) / [Developer knowledge MCP](https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity)
 
 **引用**:
-> "Faster execution: Built in Go, Antigravity CLI is snappier and more responsive. ... Antigravity CLI shares the same agent harness as Antigravity 2.0, the new Antigravity desktop application."
-> （高速実行：Go で構築された Antigravity CLI はより機敏で応答性が高い。…Antigravity CLI は新デスクトップアプリ Antigravity 2.0 と同じエージェントハーネスを共有する。）
+> "Built in Go, Antigravity CLI is snappier and more responsive. ... Antigravity CLI shares the same agent harness as Antigravity 2.0, the new Antigravity desktop application."
+> （Go製で軽快・応答性が高い。…Antigravity CLI は新デスクトップアプリ Antigravity 2.0 と同じエージェントハーネスを共有する。）
 > — [Google Developers Blog](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/)
 
-### 3. Claude Code / OpenAI Codex との違い
+> "Antigravity 2.0, IDE, and CLI share a central MCP configuration in the file `~/.gemini/config/mcp_config.json`."
+> （2.0・IDE・CLI は中央の MCP 設定ファイルを共有する。）
+> — [Codelabs - Developer knowledge MCP](https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity)
 
-**結論：3者とも「ターミナル型エージェント」としての基本機能（並列サブエージェント・MCP・ブラウザ検証・headless・AGENTS/CLAUDE.md）は出そろった。差は “モデル戦略” と “課金の入口” に出る。**
+### 2. IDE と CLI（agy）の違い・使い分け
 
-| 観点 | **Antigravity CLI (agy)** | Claude Code | OpenAI Codex (CLI) |
-|---|---|---|---|
-| 提供元 | Google | Anthropic | OpenAI |
-| 使えるモデル | **複数ベンダー**を選択：Gemini 3.5 Flash / 3.1 Pro / **Claude Sonnet 4.6 / Opus 4.6** / GPT-OSS 120B | 自社 Opus/Sonnet/Haiku 中心（Bedrock/Vertex 経由も可） | 自社 GPT-5.x/Codex 系中心（API 経由で他社接続可） |
-| 課金の入口 | **Google AI 無料 / Pro(¥2,900) / Ultra** に同梱 | Claude Pro/Max サブスク or API 従量 | ChatGPT Free/Plus/Pro/… に同梱 or API 従量 |
-| 無料での実用度 | **高（Gemini 3 Pro が無料で使える）** | 低（実用は要サブスク/API） | 中（Free 枠はあるが限定的） |
-| ブラウザ実機検証 | あり（Browser Subagent、録画も） | あり（Chrome 拡張、**ログイン状態共有で認証ページ可**, beta） | あり（in-app browser、**認証ページ非対応**） |
-| マルチエージェント並列 | あり（Agent Manager で**GUI 可視化**） | あり（subagents / Agent teams / background） | あり（subagents） |
-| MCP | クライアント（ローカル/リモート） | **クライアント＋サーバ**（`claude mcp serve`） | クライアント（STDIO/HTTP） |
-| 設定ファイル | GEMINI.md / AGENTS.md | CLAUDE.md（＋Skills/Hooks） | AGENTS.md |
-| 体感の強み | 速い・並列を物量で・無料枠太い | **コード品質・指示追従・難所実装が堅い** | **既存コードのスタイル維持・大規模理解** |
+**同じバックエンド・同じ MCP 設定・同じモデル**なので、**対話で使う限り機能はほぼ等価**。差は「ガワ（GUI か端末か）」と「自動化適性」。
 
-- **モデル戦略が一番の違い**：Antigravity は「1契約で複数社モデルのビュッフェ」、Claude Code は「Claude を深く」、Codex は「GPT を深く」。
-- **品質評価**：コミュニティの実測比較では「Claude Code は vibe coding の王」「Gemini 3.1 Pro はエージェントとして GPT-5.5 や Opus に一歩譲る」「Antigravity は最速だが成果に深さ・完全性が欠けることがある」との声。**速度＝Antigravity、精度・難所＝Claude Code、大規模＝Codex** という住み分けが定番。
+| 観点 | Antigravity IDE / 2.0 | Antigravity CLI（agy） |
+|---|---|---|
+| 操作 | GUI・エディタ統合 | 端末・キーボード/スクリプト |
+| **組み込み Browser Agent (`/browser`)** | **○ 使える** | **✗ 未対応**（CLIでは Playwright/BrowserMCP で代替） |
+| Agent Manager（並列の可視化） | ○ GUI で俯瞰 | △ 可視化は活きない（裏で並列は走る） |
+| Artifacts（計画/図/録画の視覚レビュー） | ○ 得意 | △ レビュー体験は弱い |
+| headless / スクリプト / CI | ✗（GUI前提） | **○ `agy -p` で本領** |
+| リモート/SSH/コンテナ | △ | **○ 単一バイナリで軽い** |
+| 起動の軽さ | 重い（エディタ） | **軽い** |
+
+→ **使い分けの原則**：**“見て確かめる/触って直す” は IDE、“流す/組み込む/放置する” は CLI**。あなたが UI 検証やレビューをしたい局面は IDE のまま、定型処理や一括処理を回したい局面で `agy` に降りる。
 
 **根拠**:
-- [OpenAI Codex CLI docs](https://developers.openai.com/codex/cli) / [Codex pricing](https://developers.openai.com/codex/pricing) / [Codex in-app browser](https://developers.openai.com/codex/app/browser)
-- [Claude Code Docs - Overview](https://code.claude.com/docs/en/overview) / [Chrome](https://code.claude.com/docs/en/chrome)
-- [XDA - 1か月使った比較 (2026-05-20)](https://www.xda-developers.com/used-claude-code-google-antigravity-codex-for-month-have-clear-winner/) / [metacircuits (2026-06-08)](https://metacircuits.substack.com/p/claude-code-vs-antigravity-20-vs)
+- [Codelabs - Agentic UI automation（Browser Agent は CLI 未対応）](https://codelabs.developers.google.com/agentic-ui-automation-with-antigravity)
 
 **引用**:
-> "The in-app browser does not support authentication flows, signed-in pages, your regular browser profile, cookies, extensions, or existing tabs."
-> （in-app ブラウザは認証フロー／サインイン済みページ／通常プロファイル／Cookie／拡張／既存タブに非対応。）
-> — [OpenAI Codex docs](https://developers.openai.com/codex/app/browser)（※Claude Code はログイン状態を共有でき、ここが Codex との差）
+> "The built-in browser agent is not yet supported in the terminal-first Antigravity CLI (Agy CLI). However, you can use it out-of-the-box in Antigravity IDE and Antigravity 2.0 today."
+> （組み込みブラウザエージェントは、ターミナル先行の Antigravity CLI（agy）では**まだ未対応**。IDE と 2.0 では今すぐ標準で使える。）
+> — [Codelabs - Agentic UI automation](https://codelabs.developers.google.com/agentic-ui-automation-with-antigravity)
 
-> "Gemini 3.1 Pro is just less good of an agentic model than GPT 5.5 or Opus."
-> （Gemini 3.1 Pro はエージェント用モデルとしては GPT-5.5 や Opus より単純に劣る。）
-> — [metacircuits](https://metacircuits.substack.com/p/claude-code-vs-antigravity-20-vs)
+### 3. CLI（agy）にしかできないこと
 
-### 4. Antigravity CLI に「しかできないこと」（正直な評価）
+GUI の Antigravity ではできず、**`agy` だから成立する**こと：
 
-率直に言うと、**“技術的に Antigravity だけ” という独自機能は少ない**（ブラウザ検証・並列・MCP は他2社も持つ）。本当の独自性は次の4点に集約される：
-
-1. **1つの Google AI サブスクで複数ベンダーのフラッグシップを切り替えられる**：Gemini 3 系＋Claude Sonnet/Opus＋GPT-OSS を `/model` で。Claude Code（Claude 専用）・Codex（GPT 専用）にはない “モデル・ビュッフェ”。しかも **Claude は Vertex AI Model Garden 経由で Google 枠で動くため、Anthropic への別サブスク（二重課金）が不要**。
-2. **無料プランでフラッグシップ（Gemini 3 Pro）＋エージェント機能が使える**：Claude Code / Codex が実用には課金前提なのに対し、Antigravity は無料層が太い。**コストをかけずに agentic coding を始められる**のが実質的な独自価値。
-3. **CLI / IDE / デスクトップアプリ / SDK が “同一ハーネス” で統合**：ターミナルで始めた作業を GUI の Agent Manager で俯瞰、という横断が同一基盤で成立。Agent Manager は**複数エージェントの状態・成果物・承認待ちを GUI で可視化**できる（CLI/IDE 横断の統合体験）。
-4. **Ultra 限定の Gemini 3 Pro Deep Think**（§5）。
+- **`agy -p "..."` の非対話ワンショット**：対話 UI を出さず即実行。**シェルのパイプ・cron・git hook・CI/CD に組み込める**。「コード理解 → ドキュメント生成 → テスト生成」のような多段をスクリプトで連結。
+- **`--dangerously-skip-permissions` の自律実行**：承認プロンプトを出さず CI パイプラインに直接埋め込む（※危険、後述）。
+- **単一 Go バイナリの軽さ**：Node/Python 不要。**SSH 先・コンテナ・リモートサーバ・最小環境**にそのまま置ける。エディタを開かずに起動。
+- **ターミナルを占有しない非同期バックグラウンド並列**：公式が CLI の利点として「ターミナルをロックせず大規模リファクタや複数トピック調査を並走」と明記。
+- **シェルとの合成**：`!` トグルでの直接コマンド実行など、端末ならではの操作。
 
 **根拠**:
-- [Google One ヘルプ - AI Ultra benefits（Claude/gpt-oss を Antigravity 内モデルとして明記）](https://support.google.com/googleone/answer/16286513)
-- [Codelabs - Hands-on with Antigravity CLI（モデル選択）](https://codelabs.developers.google.com/antigravity-cli-hands-on)
-- [XDA - Agent Manager の並列可視化](https://www.xda-developers.com/used-claude-code-google-antigravity-codex-for-month-have-clear-winner/)
+- [Codelabs - Accelerating Development with Antigravity CLI](https://codelabs.developers.google.com/genai-for-dev-antigravity-cli)
+- [GitHub Discussion #27274](https://github.com/google-gemini/gemini-cli/discussions/27274)
 
-> ※反証検証での訂正：「ブラウザ実機検証は Antigravity だけ」「Artifacts は唯一無二」は**誇張**。Codex・Claude Code もブラウザ検証を持ち、並列も MCP も標準化済み。ベンダー寄りブログの “唯一性” 表現は割り引いて読むべき。
+**引用**:
+> "Antigravity CLI can be run in non-interactive mode within a CI/CD pipeline to automate various tasks by passing prompts and commands directly to the CLI without requiring manual intervention."
+> （Antigravity CLI は CI/CD パイプライン内で非対話実行でき、手動介入なしにプロンプトを直接渡して各種タスクを自動化できる。）
+> — [Codelabs](https://codelabs.developers.google.com/genai-for-dev-antigravity-cli)
 
-### 5. Google AI Ultra にアップグレードでできること
+> "Antigravity CLI orchestrates multiple agents for complex tasks in the background, letting you run large-scale refactors or research several topics without locking up your terminal session."
+> （複数エージェントをバックグラウンドで統括し、ターミナルを占有せず大規模リファクタや複数調査を走らせられる。）
+> — [GitHub Discussion #27274](https://github.com/google-gemini/gemini-cli/discussions/27274)
 
-- **クォータが Pro 比で大幅増**：**$100/月（¥14,500）= 5倍**、**$200/月（¥32,000、旧 $250 から値下げ）= 20倍**。**※公式の正確な表現は「Gemini アプリ **と** Google Antigravity の両方で Pro 比 5x/20x」**（Antigravity 限定の倍率ではない）。
-- **最優先トラフィック＋新モデルへの先行アクセス**、最高のエージェントクォータ。
-- **Gemini 3 Pro Deep Think**（より深い推論モード）が対象 Ultra プランで利用可（※提供は米国・英語中心の注記あり。日本での Antigravity 経由可否は公式明記なし）。
-- **クォータが 5時間ごとリフレッシュ**は Pro と同じ仕組みで、Ultra は枠の “絶対量” が大きいという位置づけ。
+### 4. CLI（agy）が苦手なこと・弱み ★ここが一番効く
 
-**⚠️ ただし Ultra は万能ではない**：「アップデート後に Ultra でも枠が激減し90分で 0%」「Claude を1セッション開いただけで総枠の約60%消費」といった実体験が公式フォーラムに複数。**Ultra にしても “Claude 枠は別建てで小さく・消費が激しい” 構造は変わらない**。
+- **① 組み込み Browser Agent が使えない**：`/browser` の実機 UI 検証は **CLI 未対応**（§2 公式明言）。CLI でやるなら Playwright/BrowserMCP を別途繋ぐ手間。**フロントの視覚検証は IDE に戻る**のが素直。
+- **② `agy -p` が非TTYで応答を stdout に出さない致命バグ**：パイプ／サブプロセス／リダイレクトで実行すると、モデル往復は成功し **exit code 0 なのに stdout が空**。実際の応答は内部の `transcript.jsonl` にしか残らない。**CI やエージェント連携の “完全なブロッカー”**。回避には transcript を読むか `script -qec '...'` で疑似TTY化が要る（1.0.9 でも継続）。
+- **③ 承認まわりが両極端**：`agy -p` は**承認ゲートなしで read/write・シェル・ネットワークを自走**（危険）。逆に対話モードを非TTYで回すと、**描画されない承認プロンプトを永遠に待ってハング**。
+- **④ 固定トークンオーバーヘッドでクォータが速く枯れる**：システムプロンプト＋ツール定義で**毎リクエスト約23k–25kトークン**が内容に関係なく乗るとの報告。Pro 枠が短時間で尽きやすい（※数値は個人環境依存・誇張に注意）。
+- **⑤ Windows/WSL の不安定**：PATH 非継承で開いていたタブの片方だけ `agy: command not found`、移行後の旧 symlink 残存、WSL のランチャ破損で更新の度に手動修復。
+- **⑥ 可視化・全文コンテキストが弱い**：Agent Manager の並列俯瞰・Artifacts の視覚レビューは CLI だと活きない。全文ファイルをコンテキストに渡しにくいという不満も。
+- **⑦ BYOK 非対応・クローズド寄り**：自前 API キー持ち込みでのコスト制御がしにくい。Gemini CLI が OSS だったのに対し agy 本体は内部が追いにくい、との指摘。
 
 **根拠**:
-- [blog.google - New Google AI subscriptions（5x/20x・$250→$200）](https://blog.google/products-and-platforms/products/google-one/google-ai-subscriptions/)
+- [GitHub - Claude-Code-Antigravity-CLI bridge（stdout バグを transcript 読取で回避）](https://github.com/SinanTufekci/agent-intern) / [antigravitylab.net - headless non-TTY stdout 解説](https://antigravitylab.net/en/articles/integrations/antigravity-cli-agy-headless-non-tty-stdout-ci)
+- [aibuilderclub - agy Command Guide（承認/トークン/BYOK）](https://www.aibuilderclub.com/blog/antigravity-cli-guide)
+- [Qiita - Windows で agy が command not found (ayago, 2026-06-16)](https://qiita.com/ayago/items/207e4706183133985af9)
+
+**引用**:
+> "`agy -p` authenticates, talks to the model, gets the answer back… and then writes it to the controlling terminal instead of its stdout. ... Stdout bug persists — `-p` still doesn't print the answer to stdout on 1.0.9."
+> （`agy -p` は認証してモデルと往復し答えを得るが、それを **stdout ではなく制御端末に書く**。…stdout バグは継続で、1.0.9 でも `-p` は答えを stdout に出さない。）
+> — [GitHub - Claude-Code-Antigravity-CLI bridge](https://github.com/SinanTufekci/agent-intern)
+
+### 5. agy（ターミナル）vs Claude Code（ターミナル）vs Codex
+
+あなたが既に走らせている **claude（ターミナル）の枠**に置いて比べると：
+
+| 観点 | **Antigravity CLI (agy)** | Claude Code（ターミナル） | OpenAI Codex (CLI) |
+|---|---|---|---|
+| モデル | 複数社：Gemini 3.5 Flash/3.1 Pro・**Claude Sonnet/Opus 4.6**・GPT-OSS | Claude Opus/Sonnet/Haiku 中心 | GPT-5.x/Codex 系中心 |
+| 課金の入口 | Google AI 無料/Pro/Ultra に同梱 | Claude Pro/Max or API 従量 | ChatGPT プラン同梱 or API 従量 |
+| 無料での実用度 | **高（Gemini 3 Pro が無料）** | 低 | 中 |
+| コード品質・指示追従 | △（テスト更新漏れ等の指摘） | **◎（“本番投入可”の評価）** | ○（既存スタイル維持に強い） |
+| 速度・非同期投げっぱなし | **◎** | ○ | ○ |
+| 成熟度・ドキュメント | △（preview） | ◎ | ○ |
+| BYOK / コスト制御 | △（非対応） | ◎ | ◎ |
+| MCP | クライアント | **クライアント＋サーバ**（`claude mcp serve`） | クライアント |
+
+- **agy が claude に勝つ点**：Google 枠で **Gemini 3.5 Flash を実質無料・爆速で叩ける**、単一バイナリで軽い、`/model` で Gemini⇄Claude 切替。
+- **agy が claude に負ける点**：コード品質・指示追従、成熟度、クォータの読みやすさ、BYOK。
+- **実用解＝役割分担**：日本コミュニティでも **「設計・レビューは Claude Code（司令塔）、コード生成は agy の Gemini 3.5 Flash（実装役）」**で “実装側を従量課金ゼロ化” する併用が実例化。
+  - ※この「従量課金ゼロ」は **agy を自分の Google AI サブスクの OAuth で正規に動かす**話。**Antigravity の Claude をプロキシで外部 Claude Code に流用するのは ToS 違反・BAN 対象**（別問題。混同しない。詳細は [[2026-06-17_claude-code-antigravity-cli-dev-setup]]）。
+
+**根拠**:
+- [Medium - 同一タスクで3者比較 (vinamrayadav, 2026-06-04)](https://medium.com/@myselfvinamrayadav/claude-code-vs-codex-vs-antigravity-2-0-i-ran-the-same-task-through-all-three-6172de9678cf)
+- [Qiita - Claude Code司令塔×agy実装役 (fallout, 2026-06)](https://qiita.com/fallout/items/5097f0575b58f4c69b81)
+- [Claude Code Docs - Overview / MCP](https://code.claude.com/docs/en/overview) / [OpenAI Codex docs](https://developers.openai.com/codex/cli)
+
+**引用**:
+> "missed updating the test to inject a mock request ID"（Antigravity は3者中、モックの request ID を注入するテスト更新を落とした＝最弱）／ Claude Code は "review and ship as is"（レビューしてそのまま出荷できる）。
+> — [Medium - 3者比較](https://medium.com/@myselfvinamrayadav/claude-code-vs-codex-vs-antigravity-2-0-i-ran-the-same-task-through-all-three-6172de9678cf)（※単一の実体験比較。確度中）
+
+### 6. 料金プランによる違い（Pro / Ultra）と「CLI でのプラン差」
+
+**結論：プランで増えるのは “枠と優先度” だけ。それは CLI でも IDE でも共通**（同一バックエンド・同一クォータ設計）。**CLI 固有のプラン差は基本的に無い**。
+
+- **無料**（サインインのみ）：**Gemini 3 Pro・無制限タブ補完・Agent Manager・Browser 統合の全機能**が使える。リフレッシュは **週次**。
+- **Pro（¥2,900/月・約$20）**：最も寛大なレート上限＋優先処理、クォータは **5時間ごと**リフレッシュ。Gemini 3 Pro に加え Vertex 経由の Claude（Sonnet）/gpt-oss の枠が増える。超過は Google One で **AIクレジット追加購入**。
+- **Ultra**：クォータが Pro 比 **5倍（$100/月・¥14,500）／20倍（$200/月・¥32,000、旧$250から値下げ）**（※公式表現は「Gemini アプリ**と** Antigravity の両方で 5x/20x」）。新モデル先行アクセス＋最優先＋**Gemini 3 Pro Deep Think**。
+- **⚠️ 実態**：Pro 枠は体感「お試し層」。「実コーディング45分で週次ベースライン到達」「Claude を1セッション開いただけで枠の約60%消費」「超過後 数日〜168時間ロックアウト」報告多数。**Claude 枠は Gemini と別建てで小さく消費が激しい**ため、Ultra でも Claude 使い放題にはならない。
+
+**根拠**:
+- [blog.google - Antigravity rate limits (Pro/Ultra)](https://blog.google/feed/new-antigravity-rate-limits-pro-ultra-subsribers/) / [New Google AI subscriptions](https://blog.google/products-and-platforms/products/google-one/google-ai-subscriptions/)
 - [Google One ヘルプ - AI Ultra benefits](https://support.google.com/googleone/answer/16286513)
-- [blog.google - Gemini 3 Deep Think](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/)
-- [discuss.ai.google.dev - Ultra quota reduction](https://discuss.ai.google.dev/t/ultra-dramatic-quota-reduction-after-update-this-needs-an-official-explanation/135526) / [Ultra: Claude quota worse than Pro](https://discuss.ai.google.dev/t/ultra-subscription-claude-model-quota-even-worse-than-pro/135870)
+- [discuss.ai.google.dev - Pro quota limits](https://discuss.ai.google.dev/t/navigating-antigravity-pro-quota-limits/130212)
 
 **引用**:
 > "Based on your specific Google AI Ultra plan, you get 5x or 20x usage quota in Gemini and Google Antigravity compared to the Google AI Pro plan."
-> （ご利用の Ultra プランに応じて、Gemini と Google Antigravity で Pro プラン比 5倍または20倍の使用量クォータを得る。）
+> （Ultra プランに応じて、Gemini と Google Antigravity で Pro 比 5倍または20倍の使用量クォータを得る。）
 > — [Google One ヘルプ](https://support.google.com/googleone/answer/16286513)
 
-> "initiating just a single conversation session with the Claude model immediately consumes approximately 60% of my total quota."
-> （Claude モデルで会話セッションを1つ開始しただけで、総クォータの約60%を即消費する。）
-> — [discuss.ai.google.dev（Ultra 加入者の報告）](https://discuss.ai.google.dev/t/ultra-subscription-claude-model-quota-even-worse-than-pro/135870)
+### 7. 実践 — あなたの環境（IDE＋Claude Code）での使いどころ
 
-### 6. 実践：Pro を「使いこなす」ための運用（あなたの悩みへの直球の答え）
-
-「使いこなせていない」の正体は **“高消費モデルで枠をすぐ溶かしている”** こと。複数ソースで一致する実践 tips：
-
-- **普段使いは Gemini 3.5 Flash（作業の7〜8割）**。校正・調べ物・微修正・テスト生成は Flash。Flash は Pro 枠をほぼ消費せず、タブ補完は 0 消費。
-- **“考える仕事” だけ Gemini 3.1 Pro / Claude Sonnet 4.6 に昇格**、一発勝負の重要成果物のみ **Opus 4.6 を切り札として温存**。終わったら即 Flash に戻す。
-- **モデル使用量インジケータを「ガソリンメーター」化**（黒→黄→赤）して監視。黄で早めに Flash へ。
-- **Browser Subagent / Terminal（テスト実行・Web 巡回）は高消費**。簡単なタスクでは自動ブラウザテストを切る。
-- **計画フェーズは Antigravity の外で**（コンテキストファイル肥大を避ける）。
-- **Agent Manager** で各エージェントにファイル所有権を割当て、進捗のない小編集の連発は即停止、アイドルは閉じる。
-- **Ultra の判断法**：1週間「上限到達回数」と「その時の並列数」を記録し、$20 と $100 のどちらが自分の数字で安いか計算してから。Flash 中心で枠が回るなら Pro のままで十分。
+- **基本は今のまま**：見て直す・UI 検証・レビューは **Antigravity IDE＋Claude Code** が最適。`agy` で置き換える必要はない。
+- **`agy` を足すと効く場面**：
+  - 定型処理を **スクリプト/CI に流す**（ただし `agy -p` の stdout バグを踏むので、transcript 読取か疑似TTYの回避策込みで）。
+  - **Gemini 3.5 Flash で “量” をさばく**実装役を、Claude Code（司令塔）と分担。普段使いを Flash に寄せれば Pro 枠が長持ち。
+  - **リモート/サーバ/コンテナ**で軽く動かしたいとき（単一バイナリ）。
+- **クォータを溶かさない運用**：普段は Gemini 3.5 Flash（枠ほぼ0消費）、考える仕事だけ 3.1 Pro/Sonnet 4.6、一発勝負だけ Opus 4.6 を温存。使用量メーターを監視。
 
 ```mermaid
 flowchart TD
-  A["タスク発生"] --> B{"頭を使う仕事か?"}
-  B -->|"No: 校正/調査/微修正/テスト生成"| C["Gemini 3.5 Flash<br/>(普段使い・枠ほぼ0消費)"]
-  B -->|"Yes: 設計/難所/重要成果物"| D{"どれくらい重要?"}
-  D -->|"中: 通常の思考タスク"| E["Gemini 3.1 Pro / Claude Sonnet 4.6"]
-  D -->|"最重要: 一発勝負"| F["Claude Opus 4.6<br/>(切り札・温存)"]
-  C --> G["使用量メーター監視<br/>黄になったら即Flashへ"]
-  E --> G
-  F --> G
-  G --> H{"枠が頻繁に枯渇?<br/>並列を日常的に回す?"}
-  H -->|"No"| I["Pro(¥2,900)のままでOK"]
-  H -->|"Yes"| J["Ultra(5x/20x)を検討<br/>※Claude枠は別建てで枯渇しやすい点に注意"]
+  A["やりたいこと"] --> B{"見て確かめる/触って直す?<br/>(UI検証・レビュー)"}
+  B -->|Yes| C["Antigravity IDE のまま<br/>(+ Claude Code)"]
+  B -->|No| D{"スクリプト/CI/cron に<br/>流したい?"}
+  D -->|Yes| E["agy -p<br/>※stdoutバグ回避策必須<br/>(transcript読取/疑似TTY)"]
+  D -->|No| F{"量をさばく実装役が欲しい?<br/>リモートで軽く動かす?"}
+  F -->|Yes| G["agy + Gemini 3.5 Flash<br/>(司令塔=Claude Code と分担)"]
+  F -->|No| C
+  G --> H["枠が枯れる/並列を日常化?"]
+  C --> H
+  H -->|Yes| I["Ultra(5x/20x)検討<br/>※Claude枠は別建てで枯れやすい"]
+  H -->|No| J["Pro(¥2,900)のままでOK"]
 ```
 
 ## ⚠️ 注意点・矛盾・反証結果
 
-- **【反証で要訂正】「無料で全モデル・課金は枠だけ」**：核（無料で Gemini 3 Pro＋主要機能、課金≒枠＋優先）は **confirmed**。ただし **(1) Claude/GPT-OSS が “無料” で使えるとは公式は明言していない**（公式が無料で名指しするのは Gemini 3 Pro のみ。Claude/gpt-oss は “Pro/Ultra の枠が増える” 文脈で登場）、**(2) Deep Think は Ultra 限定**で「課金で増えるのは枠だけ」の例外、**(3) 週次/ベースライン枠の枯渇で実質的に機能制限に転じる**。→ 総合 **uncertain（要注意）**。
-- **【反証で確定／訂正】Ultra「5x/20x」は公式記載（confirmed）**。ただし **対象は「Gemini アプリ と Antigravity の両方」**で、Antigravity 限定の倍率ではない。$250→$200 値下げ・$100/$200 の2階層も公式確認。
-- **【反証で確定／要注意】二重課金回避（confirmed）**：Antigravity 内の Claude は Vertex AI Model Garden 経由で **Google 枠で動き、Anthropic への別サブスクは不要**。**ただし「Claude 使い放題」ではない**：Claude 枠は Gemini と別建てで小さく、1セッションで枠の大半を溶かす報告が公式フォーラムに多数。**※これは Antigravity 内の正規モデル選択の話で、Antigravity の Claude をプロキシで外部 Claude Code に流用するのは ToS 違反・BAN 対象**（別問題、過去調査 [[2026-06-17_claude-code-antigravity-cli-dev-setup]] 参照）。
-- **【反証で確定／訂正】提供状況とモデル名**：旧 Gemini CLI / Gemini Code Assist IDE 拡張は **2026-06-18 に Pro/Ultra/無償個人向けの提供停止**（Standard/Enterprise・有償 API は継続）→ **公式推奨の移行先が `agy`**。モデル名は **Opus は 4.6（4.8 ではない）/ Sonnet は 4.6（4.5 ではない）/ Pro は 3.1（3 ではない）** が現行。**Flash は「3.5」と「3」で表記揺れ**（公式 Codelab は 3.5 Flash を採用＝最有力だが、最新は **アプリ内 `/model` で要確認**）。公式ヘルプは更新ラグで「Claude 4.5 Sonnet」と古い表記が残る。
-- **【誇張に注意】「ブラウザ実機検証 / Agent Manager / Artifacts は Antigravity 独自」**：Codex・Claude Code もブラウザ検証・並列を持つ。Antigravity の独自性は “唯一の機能” ではなく **“無料枠の太さ × モデルの品揃え × プラットフォーム統合”**。
-- **【裏取り不能・誇張】クォータの極端な数値**（「無料1日250→20・92%減」「週300M→9M・97%減」等）は一次/公式に裏付けなし。確実なのは「ロックアウト報告の実在」「公式は無料＝週次・有料＝5時間更新」まで。**数値は変動が激しく、引用の多くが 2026-03 の枠激減騒動期のもの。最新は実機で要確認**。
-- **モデルバージョンの時系列**：記事ごとに「Gemini 3 Pro / 3.1 Pro」「3 Flash / 3.5 Flash」「Opus 4.6 / 4.8」が混在（2025-11 ローンチ〜2026-06 で更新）。本レポートは 2026-06 時点の公式 Codelab 基準。
+- **【前回からの訂正】`/browser`・`/artifact` は CLI でフルに使える、ではない**：公式 Codelab が「**組み込み Browser Agent は agy CLI 未対応**（IDE/2.0 専用）」と明言。フロントの視覚検証は IDE に戻るのが正。
+- **【CLI最大の地雷】`agy -p` の stdout バグ（confirmed）**：非TTYで応答を stdout に出さず exit 0、応答は `transcript.jsonl` のみ。GitHub ブリッジ実装＋解説記事で一致、**1.0.9 でも継続**。CI/連携に使うなら回避策必須。
+- **【反証で確定／訂正】プラン差は CLI 固有ではない**：アーキ・MCP 設定・コア能力は CLI/IDE 共有（"same agent harness"／"share a central MCP configuration"）。よって機能面のプラン差は基本共通。ただし**「クォータが全サーフェスで完全に同一」と明言する公式文は未確認**（断定は避ける）。
+- **【反証で確定】Ultra「5x/20x」は公式記載**。ただし対象は「Gemini アプリ**と** Antigravity の両方」で、Antigravity 限定ではない。$250→$200 値下げ・$100/$200 の2階層も公式確認。
+- **【反証で確定／要注意】二重課金回避は正しいが「Claude 使い放題」は誤り**：Antigravity 内 Claude は Vertex 経由で Google 枠で動き Anthropic 別契約は不要。だが Claude 枠は別建てで小さく、1セッションで枠の大半を溶かす報告が公式フォーラムに多数。**プロキシで外部流用は ToS 違反・BAN 対象**（別問題）。
+- **【誇張に注意】「ブラウザ検証/Agent Manager/Artifacts は Antigravity 独自」**：ブラウザ検証は Codex・Claude Code も持つ（むしろ Claude Code はログイン状態共有で認証ページに強い）。Antigravity の独自性は “唯一の機能” ではなく **“無料枠の太さ × モデルの品揃え × プラットフォーム統合”**。
+- **【裏取り不能・誇張】極端なクォータ数値**（「2プロンプトでロックアウト」「23k–25kトークン固定」「92%減」等）は個人環境依存・単一ソース寄り。確実なのは「枯渇/ロックアウト報告の実在」「無料=週次・有料=5時間更新」まで。**最新は実機で要確認**。
+- **モデル名の確定**：agy 現行は **Gemini 3.5 Flash（既定）/ 3.1 Pro / Claude Sonnet 4.6 / Opus 4.6（4.8 ではない）/ GPT-OSS 120B**。公式ヘルプは更新ラグで「Claude 4.5 Sonnet」と古い表記が残る。最新は `/model` で確認。
+- **コード消失事件の帰属注意**：「D:ドライブ全消去」は **Antigravity IDE/エージェント（Turbo mode）**が出元で、`agy` CLI 固有事象ではない（混同しない）。
 
 ## 📚 参照ソース一覧
 
 - 公式:
-  - [Antigravity rate limits for Pro/Ultra (blog.google)](https://blog.google/feed/new-antigravity-rate-limits-pro-ultra-subsribers/)
-  - [New Google AI subscriptions / I/O 2026（5x/20x・$250→$200）(blog.google)](https://blog.google/products-and-platforms/products/google-one/google-ai-subscriptions/)
-  - [Google One ヘルプ - AI Pro benefits](https://support.google.com/googleone/answer/14534406)
-  - [Google One ヘルプ - AI Ultra benefits](https://support.google.com/googleone/answer/16286513)
   - [Transitioning Gemini CLI to Antigravity CLI (Google Developers Blog, 2026-05-19)](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/)
-  - [Hands-on with Antigravity CLI (Google Codelabs)](https://codelabs.developers.google.com/antigravity-cli-hands-on)
-  - [Getting Started with Google Antigravity (Google Codelabs)](https://codelabs.developers.google.com/getting-started-google-antigravity)
-  - [Accelerating Development with Antigravity CLI (Google Codelabs)](https://codelabs.developers.google.com/genai-for-dev-antigravity-cli)
-  - [Gemini 3 Deep Think (blog.google)](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/)
-  - [gemini.google/subscriptions](https://gemini.google/subscriptions/)
-  - [OpenAI Codex CLI](https://developers.openai.com/codex/cli) / [pricing](https://developers.openai.com/codex/pricing) / [in-app browser](https://developers.openai.com/codex/app/browser)
-  - [Claude Code Docs - Overview](https://code.claude.com/docs/en/overview) / [MCP](https://code.claude.com/docs/en/mcp) / [Chrome](https://code.claude.com/docs/en/chrome)
+  - [google-gemini/gemini-cli Discussion #27274](https://github.com/google-gemini/gemini-cli/discussions/27274)
+  - [Hands-on with Antigravity CLI (Codelabs)](https://codelabs.developers.google.com/antigravity-cli-hands-on)
+  - [Accelerating Development with Antigravity CLI (Codelabs)](https://codelabs.developers.google.com/genai-for-dev-antigravity-cli)
+  - [Agentic UI automation（Browser Agent は CLI 未対応）(Codelabs)](https://codelabs.developers.google.com/agentic-ui-automation-with-antigravity)
+  - [Developer knowledge MCP（中央MCP設定の共有）(Codelabs)](https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity)
+  - [Antigravity rate limits for Pro/Ultra (blog.google)](https://blog.google/feed/new-antigravity-rate-limits-pro-ultra-subsribers/)
+  - [New Google AI subscriptions / I/O 2026 (blog.google)](https://blog.google/products-and-platforms/products/google-one/google-ai-subscriptions/)
+  - [Google One ヘルプ - AI Ultra benefits](https://support.google.com/googleone/answer/16286513)
+  - [OpenAI Codex CLI](https://developers.openai.com/codex/cli) / [Claude Code Docs - Overview](https://code.claude.com/docs/en/overview)
 - コミュニティ:
-  - [I used Claude Code, Antigravity & Codex for a month (XDA, Parth Shah, 2026-05-20)](https://www.xda-developers.com/used-claude-code-google-antigravity-codex-for-month-have-clear-winner/)
-  - [Claude Code vs Antigravity 2.0 (metacircuits, Jonas Braadbaart, 2026-06-08)](https://metacircuits.substack.com/p/claude-code-vs-antigravity-20-vs)
+  - [Claude-Code-Antigravity-CLI bridge（stdout バグの回避実装）](https://github.com/SinanTufekci/agent-intern)
+  - [antigravitylab.net - agy headless non-TTY stdout (CI) 解説 (2026-06-13)](https://antigravitylab.net/en/articles/integrations/antigravity-cli-agy-headless-non-tty-stdout-ci)
   - [Antigravity CLI: The agy Command Guide (aibuilderclub)](https://www.aibuilderclub.com/blog/antigravity-cli-guide)
+  - [Claude Code司令塔×agy実装役 (fallout, Qiita, 2026-06)](https://qiita.com/fallout/items/5097f0575b58f4c69b81)
+  - [Windows で agy が command not found (ayago, Qiita, 2026-06-16)](https://qiita.com/ayago/items/207e4706183133985af9)
+  - [Claude Code vs Codex vs Antigravity 2.0 同一タスク比較 (vinamrayadav, Medium, 2026-06-04)](https://medium.com/@myselfvinamrayadav/claude-code-vs-codex-vs-antigravity-2-0-i-ran-the-same-task-through-all-three-6172de9678cf)
   - [Navigating Antigravity Pro quota limits (discuss.ai.google.dev)](https://discuss.ai.google.dev/t/navigating-antigravity-pro-quota-limits/130212)
-  - [Ultra: dramatic quota reduction after update (discuss.ai.google.dev)](https://discuss.ai.google.dev/t/ultra-dramatic-quota-reduction-after-update-this-needs-an-official-explanation/135526)
-  - [Ultra: Claude model quota even worse than Pro (discuss.ai.google.dev)](https://discuss.ai.google.dev/t/ultra-subscription-claude-model-quota-even-worse-than-pro/135870)
   - [クォータ節約・色で使い分ける (note/kino)](https://note.com/kino_11/n/nf0d664528cdc)
-  - [Gemini 3 Pro × Opus 使い分け (note/biwakonbu, 2025-12-11)](https://note.com/biwakonbu/n/n77c8568a6758)
 </content>
 </invoke>
